@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTest", "TaskTest\TaskTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTest", "WpfTest\WpfTest.csproj", "{B9AA8998-D03E-4F3B-ADDE-A33F9C9C76BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{287E1DCE-C073-4E75-9767-C847B9996953}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "await4.net4", "await4.net4\await4.net4.csproj", "{79D67645-F5CA-4BC4-9BB2-E0AF2DA5A06E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{B9AA8998-D03E-4F3B-ADDE-A33F9C9C76BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9AA8998-D03E-4F3B-ADDE-A33F9C9C76BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9AA8998-D03E-4F3B-ADDE-A33F9C9C76BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{287E1DCE-C073-4E75-9767-C847B9996953}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{287E1DCE-C073-4E75-9767-C847B9996953}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{287E1DCE-C073-4E75-9767-C847B9996953}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{287E1DCE-C073-4E75-9767-C847B9996953}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79D67645-F5CA-4BC4-9BB2-E0AF2DA5A06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79D67645-F5CA-4BC4-9BB2-E0AF2DA5A06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79D67645-F5CA-4BC4-9BB2-E0AF2DA5A06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79D67645-F5CA-4BC4-9BB2-E0AF2DA5A06E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

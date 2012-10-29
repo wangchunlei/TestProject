@@ -1,0 +1,484 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>What's new in LINQPad</title>
+	<style type="text/css">
+		em
+		{
+			font-style: normal;
+			color: #e00;
+			font-weight: bold;
+		}
+		li
+		{
+			margin-top: 0.5em;
+			margin-bottom: 0.5em;
+		}
+		body
+		{
+			font-family: Candara;
+		}
+		pre
+		{
+			font-size:110%;
+			margin-left:3em;
+		}
+	</style>
+</head>
+<body>
+	<h1>
+		What&#39;s new in LINQPad</h1>
+	<em id='LP4'>Note: A version of LINQPad is <a href="http://www.linqpad.net/Download.aspx">
+		available that runs on .NET Framework 4.0.</a> This has an (almost) identical feature set to LINQPad
+		2, but targets C# 4 and VB 9 and lets you access Framework 4.0 features (such as improved OData support). LINQPad
+		4 is a separate product and is updated in parallel to LINQPad 2.</em>
+
+	<h2>Version 2.42 / 4.42</h2>
+
+		<p>Version 2.42 fixes a bug that could cause excessive round-tripping when dumping Entity Framework 4.0 objects.</p>
+
+		<h3>Performance</h3>
+		<p>
+			This build features a number of significant internal changes to reduce memory consumption and improve performance.
+		</p>
+
+		<h3>Result Caching</h3>
+
+		<p>LINQPad provides a new extension method called <b>Cache</b> for caching results between query runs. Cache() is 
+		transparent and fluent, so you can insert it into existing queries without making further changes.</p>
+
+		<p>To demonstrate, try running the following query, which downloads five web pages, and then tells you
+		how many times the word 'Semaphore' appears in each page:
+		</p>
+
+		<pre>
+var webPages = (
+   from page in "default.aspx part2.aspx part3.aspx part4.aspx part5.aspx".Split()
+   select new 
+   {
+      Uri = page,
+      Text = new System.Net.WebClient().DownloadString ("http://albahari.com/threading/" + page)
+   }
+).Cache();
+    
+var query = from page in webPages
+   select new 
+   {
+      page.Uri, 
+      matches = Regex.Matches (page.Text, @"(?i)\b" + "semaphore" + @"\b").Count
+   };
+
+query.Dump();</pre>
+
+		<p>Now change the word 'semaphore' to something else and re-run the query. Notice that it executes instantly - because we 
+		called <b>Cache</b> on the slow-running portion of the query.</p>
+
+		<p>You can call Cache() several times in a query to cache different result sets. LINQPad will allocate separate cache slots
+		unless the results are identically typed, in which case you can call Cache with a string to specify a unique key.</p>
+
+		<p>You can clear the cache at any time by clearing the query's AppDomain (Shift+F5).</p>
+
+		<p>Cache() operates on (lazily-evaluated) IEnumerable&lt;T&gt;/IQueryable&lt;T&gt; expressions. When you cache something for
+		the first time, it acts as though you were calling ToArray on the sequence, except it that also keeps a reference to the results
+		in memory. When it runs again, it retrieves that reference instead of enumerating the input sequence.</p>
+
+		<p>You can also cache non-lazy sequences (such as arrays) and other kinds of objects, via the Cache method on the Util class that
+		accepts Func&lt;T&gt;. For example:</p>
+
+		<pre>Customer c = Util.Cache (() => Customers.First());</pre>
+
+		<h3>Output</h3>
+		<ul>
+			<li>Results can now be displayed in data grids - either via the new button in the toolbar, or by clicking the new extenser arrow in a table header.
+			The data grids impose no arbitrary limit on the number of rows that can be displayed and allow exporting to Excel (on the context menu). They also let you
+			interactively 'walk' lazily loaded navigation properties by clicking on their hyperlinks.
+			The grid formatting mode can also be used for non-data objects - there's no limit on the nesting depth because objects are materialized on
+			demand. Grids show 'live' data, so if you Dump() an object to a grid, make changes to it and then Dump() it again,
+			you'll see only the final version. (In contrast, the standard rich text results window takes a snapshot of the object graph each time you call Dump).</li>
+
+			<li>You can now dump any WPF element or Windows Forms control and it will display in the output window. If you want more control over how it's displayed,
+			instead use the static methods on the new PanelManager class. You can attach event handlers to the controls and interact with the controls after
+			the query has finished.</li>
+
+			<li>For users of <a href="http://msdn.microsoft.com/en-us/data/gg577609">Reactive Framework</a>, you can now dump <strong>IObservable</strong>s and 
+				watch the results change interactively with the new <strong>DumpLive</strong> extension method. (DumpLive 
+				is implemented internally by dumping WPF elements.)</li>
+
+			<li>There's a new <strong>Format</strong> button on the results window to control the expansion of nested object graphs.</li>
+
+			<li><strong>New keyboard shortcuts</strong>: Pressing any of the navigation keys 
+				(Left, Right, Up, Down, PageUp, PageDown, Home, End) with the <strong>Alt</strong> 
+				key scrolls or navigates the output panels without leaving the code editor.</li>
+			<li><strong>Util.ClearResults</strong>() clears the results window.</li>
+		</ul>
+			
+		<h3>Extensibility</h3>
+		<ul>
+			<li>In <b>My Queries</b>, there's now a special query called <b>My Extensions</b> for writing extension methods (and other types)
+			that are available to all queries.</li>
+
+			<li>You can now write custom output visualizers in Windows Forms or WPF, simply by writing methods that dump controls or elements. Or, if you want
+			more control, call <strong>PanelManager.DisplayControl</strong> or <strong>PanelManager.DisplayWpfElement</strong> 
+			For instance, the following displays a WPF button (you'll
+			need to import the appropriate assemblies and namespaces - press F4 or, if you 
+			have autocompletion, click the smart tag that appears):
+
+<pre>PanelManager.DisplayWpfElement (new Button { Content = "Button" });</pre>
+
+			(There's also a method on PanelManager to display syntax-colored text.) <a href="http://www.linqpad.net/CustomVisualizers.aspx">Click here for full details on writing 
+			and deploying custom visualizers</a>.</li>
+	</ul>
+
+	<h3>Compatibility</h3>
+	<p>LINQPad now supports:</p>
+	<ul>		
+		<li><b>Oracle databases</b> - go to Add Connection | View More Drivers</li>			
+		<li>the <a href="http://msdn.microsoft.com/en-us/devlabs/gg585582">Microsoft DataFlow CTP</a> (you can .Dump() blocks for a live visualization)</li>
+		<li>the <strong>async</strong> and <strong>await</strong> keywords, if you have installed either the Framework 4.5 beta or the <a href="http://msdn.microsoft.com/en-us/vstudio/gg316360">Async CTP</a></li>
+		<li>custom <strong>IObservable</strong> implementations and IAsyncEnumerable (from Interactive Extensions) when dumped</li>
+		<li>machines on which only the .NET 4 Client Profile is installed</li>
+		<li><strong>Entity Framework 4.1 / 4.2 / 4.3</strong> for data contexts based on DbContext - click
+			<strong>Add Connection</strong> and choose <strong>Entity Framework POCO</strong>. 
+			ESQL and SQL queries also work for code-first connections.</li>
+	</ul>
+
+	<h3>Compiler</h3>
+	<ul>
+		<li>References that you add to the <b>My Extensions</b> query (bottom of <b>My Queries</b>) are available globally to all queries. Unlike with
+		the <b>Set as default for new queries</b> option, if you change these global references later, the changes will apply to existing queries.</li>
+		<li>LINQPad now has the concept of a <strong>plug-in folder</strong>. All DLLs and 
+			EXEs that reside in the plug-in folder are automatically
+		referenced by all queries. You can set the plug-in folder location in Edit | Preferences, Folders.</li>
+		<li>Compiler warnings (and all errors) are now displayed when running a query.</li>
+		<li>There's now a button in the status bar for toggling compiler optimizations.</li>
+		<li>LINQPad now defines the <strong>LINQPAD</strong> symbol to assist with conditional compilation when pasting between LINQPad and Visual Studio.
+			You can also add your own <strong>#define</strong> directives to C# queries (in statements 
+			and program mode).</li>
+		<li>In 'C# Program' mode, you can tell LINQPad to make any extra types that you define non-nested by defining the NONEST symbol.</li>
+		<li>There's now an <a href="http://www.linqpad.net/beta.aspx">Any-CPU build for LINQPad 4.x</a>. This is useful
+			if you have queries that require more than 3GB of RAM, or if you need to reference assemblies built only for X64.</li>
+	</ul>
+		
+	<h3>Execution Engine</h3>
+	<ul>
+		<li>Any new threads that you create can now continue to Dump out results after a query's main thread has finished executing. This means
+			that the following now works:
+			<pre>   new Thread (() => "Hello from a thread".Dump()).Start();</pre>
+			<pre>   Task.Factory.StartNew (() => "Hello from a task".Dump());</pre>
+			In case your threads run wild, there's a new option on the Query menu to cancel all threads (<strong>Ctrl+Shift+F5</strong>).
+		</li>
+		<li>When querying a database, the connection string&#39;s <strong>Application Name</strong> 
+			now includes the name of the query.</li>
+		<li>LINQPad now tracks the execution of a query's main thread as it's running (in 'Statements' and 'Program' mode). You can toggle this feature on the Query menu.</li>
+	</ul>
+
+	<h3>Editor</h3>
+	<ul>
+		<li>There's a new <b>Copy Markdown</b> option on the Edit menu for pasting code into StackOverflow, and a <b>Paste as Escaped String</b>
+		option for pasting strings as C# or VB literals.</li>
+		<li>Line numbers in the editor is now an option (Edit | Preferences).</li>
+	</ul>
+
+	<h3>Other</h3>
+		<ul>
+			<li>You can now hide/show the Explorer panels with 'X' icon on the menu (or Shift+F8)</li>
+			<li>You can now arrange the results panel vertically via the new results menu (or Ctrl+F8)</li>
+			<li>Alt+W displays a list of all open queries</li>
+			<li>When you switch the query language to SQL, LINQPad updates the Schema Explorer to show SQL column
+				names rather than CLR property names.</li>
+			<li>Querying system information tables is supported in SQL Azure as well as SQL Server (go to Connection Properties).</li>
+			<li>Queries can now prompt for passwords - and securely save them - by calling Util.GetPassword("password-name").
+			Passwords are stored in the Local Application Data folder and are encrypted with the Windows Data Protection API. 
+			You can change and delete passwords via a new option on the File menu.
+			 </li>
+			<li>If you're using SQL Server authentication and your password expires, LINQPad presents a dialog for changing
+				your password. You can disable this dialog in Edit | Preferences | Advanced.</li>
+		</ul>
+
+	<h2>
+		Version 2.31 / 4.31</h2>
+	<ul>
+		<li>If you have a <a href="http://www.linqpad.net/Premium.aspx">LINQPad Premium</a> license, you can now write
+		queries that span multiple SQL Server databases - simply by control+dragging additional database(s) from the
+		Schema Explorer into your query. To access those additional databases in your queries, use database.table notation
+		(e.g., "Northwind.Regions.Take(100)"). You can also use the connection properties dialog to specify additional 
+		databases - this dialog will also allow you to include databases from linked servers (linked servers must
+		be set up in SQL Server by calling sp_addlinkedserver).</li>		
+		<li>LINQPad now has an automatic recovery feature for unsaved queries in case of unexpected shutdown.</li>
+		<li>Console.ReadLine can now be called in LINQPad, offering a simple means to prompt for data at runtime. You can also
+		call <b>Util</b>.ReadLine, which is overloaded to accept prompt text and a default value. For example:
+<pre>
+Util.ReadLine ("Enter your name").Dump();
+Util.ReadLine ("Enter your name", "Joe Bloggs".Dump();    // Default value of Joe Bloggs
+</pre>
+		There is also a generic overload of Util.ReadLine that returns <i>typed</i> data:
+<pre>
+int age = Util.ReadLine<b>&lt;int&gt;</b> ("Enter your age");
+</pre>
+		Any primitive type will work - as will any type for which a Type Converter is present. Supplying a default
+		value allows the compiler to infer the type parameter, so you can omit it:
+<pre>
+DateTime dt = Util.ReadLine ("Date of birth", DateTime.Now);
+</pre>
+		Nullable types are also supported, and a list of suggestions can be passed in the third parameter:
+<pre>
+int? age = Util.ReadLine&lt;int?&gt; ("Enter your age (optional)");
+string name = Util.ReadLine ("Your favorite color", "", new[] { "Red", "Yellow", "Green", "Blue" });
+</pre>		
+		</li>
+		<li>You can now query SQL Server system views and execute system stored procedures. Just go to the connection properties
+		dialog and tick the new checkbox - you can then type "sys.sp_who()" or "INFORMATION_SCHEMA.ROUTINES.Take(100)". System
+		views and SPs are fully supported by autocompletion.</li>
+		<li>Support for stored procedures has been improved in LINQPad 4: return values and output parameters are now displayed
+		and optional parameters are enabled for all SP parameters. This means that you can omit parameters and use named arguments
+		to specify just the values you want to pass:
+<pre>
+spFoo (date:DateTime.Now, historical:false)
+</pre>
+		In LINQPad 4, you can also use the new .AsDynamic method to query the DataSet returned from a stored procedure as
+		though the DataSet was typed. For example:
+<pre>
+sys.sp_who2().<b>AsDynamic()</b>.Where (r => r.DBName == "master")
+</pre>
+		The AsDynamic method returns IEnumerable&lt;dynamic&gt;. If a stored proc returns multiple result sets, you can access
+		the additional result sets by specifying an index when calling AsDynamic.
+		</li>
+		<li>For autocompletion users, pressing F1 displays an Internet search of the type/member at the cursor. 
+		Pressing Shift+F1 brings up the type/member in <a href="http://www.red-gate.com/products/reflector/">.NET Reflector</a>, loading
+		the necessary assembly into Reflector if necessary.</li>
+		<li>You can now display images in LINQPad's output by calling the Util.Image method or dumping a System.Drawing.Image object.
+		When calling Util.Image, you can supply a byte array, filename, or URI. The latter can be used in conjunction with
+		<a href="http://code.google.com/apis/chart/">Google Chart API</a> to draw graphs. For example:
+<pre>
+Util.Image ("http://chart.apis.google.com/chart?cht=p3&chd=s:Uf9a&chs=350x140&chl=January|February|March|April")
+</pre>		
+		outputs the following:<br />
+		<img src='http://chart.apis.google.com/chart?cht=p3&chd=s:Uf9a&chs=350x140&chl=January|February|March|April' />
+		<br />
+		LINQPad also now defines a .ToImage() extension method that operates on binary data, so you can go:
+<pre>
+Contacts.Select (c => new { c.Name, MugShot = c.Picture.ToImage() })
+</pre>		
+		</li>
+		<li>You can now inject raw HTML into LINQPad's output by calling Util.RawHtml, passing in either a string or an XElement node.
+		For instance:
+<pre>
+Util.RawHtml (new XElement ("h1", "This is a big heading")).Dump();
+</pre>		
+		</li>
+		<li>There's a new toggle option on the Query menu to automatically scroll results to the end. This is useful in queries that
+		progressively write data to the output window.</li>
+		<li>You can now control LINQPad's progress bar by setting the Util.Progress property to a value between 0 and 100.</li>
+		<li>The Export button in the results tab now has an 'Export to HTML' option.</li>
+		<li>There's now (limited) support for the geometry, geography and hierarchyid types in SQL Server 2008. Columns of these types
+		appear in result sets although you can't update them or use them to predicate queries (due to limitations in LINQ to SQL and
+		Entity Framework).</li>
+		<li>Reactive Framework works fully with F# queries. Commenting/uncommenting also now works in F# mode.</li>
+		<li>Saving a query with as .SQL extension generates a file compatible with SSMS.</li>
+		<li>Hyperlinks for associations between dbo tables and tables in other schemas now work.</li>
+		<li>Queries defining classes with extension methods can now reference other classes in the query.</li>
+		<li>You can access the current query's file path with Util.CurrentQueryPath.</li>
+	</ul>
+	<h2>
+		Version 2.26 / 4.26</h2>
+	<ul>
+		<li>This version of LINQPad explicitly supports <a href="https://www.sqlazureservices.com">Microsoft
+			Dallas</a> - a repository of free and premium cloud data sources. Just click 'Add Connection' 
+			and choose 'Microsoft Dallas'. This feature works best in <a href="http://www.linqpad.net">LINQPad 4.x</a>
+			since LINQPad 4.x targets Framework 4.0 which has a newer OData API.</li>
+		<li>
+			You can now use LINQPad as an F# scratchpad: simply change the query language to
+			'F# Expression' or 'F# Program', type in some F# code and hit F5! For more information,
+			take a look at the F# tutorial in the samples tab (bottom left).</li>
+		<li>You can now undock the results window into a second monitor by pressing F8 (Query
+			Menu | Undock Results).</li>
+		<li>The editor background color is now configurable in Edit | Preferences.</li>
+		<li>Where appropriate, custom assembly references are now stored in the .LINQ file with
+			both relative and absolute path information.</li>
+		<li>You can now activate autocompletion via the command line as follows: <code>LINQPad.exe
+			-activate=*code*</code></li>
+		<li><a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=0d2357ea-324f-46fd-88fc-7364c80e4fdb&displaylang=en">
+			SQL CE 4.0 CTP</a> is now supported.</li>
+	</ul>
+	<h2>
+		Version 2.20 / 4.20</h2>
+	<p>
+		Note: for a video demonstration of the new features in this release, take a look
+		at the <a href="http://www.linqpad.net/Version2andBeyond.aspx">recent webcast</a>
+		recording (jump to 22:00).</p>
+	<ul>
+		<li>There's a new 'Navigate To' dialog (Ctrl+,) to quickly locate a query in your queries
+			folder (or a sample). This is in addition to the 'Find All' option introduced in
+			V2.10.</li>
+		<li>The Dump() method lets you specify a maximum depth. This can be useful both for
+			increasing and decreasing the default depth of 5.</li>
+		<li>You can now give connections a custom name (right-click the connection and choose
+			'Rename').</li>
+		<li>Incremental search is now supported (Ctrl+I).</li>
+		<li>When using Microsoft Reactive Framework, you can now Dump observable sequences directly.
+			Calling Dump() on an observable sequence is non-blocking, so you can observe several
+			sequences at once.</li>
+		<li>If you associate LINQPad with .linq files, double-clicking a .linq file will re-use
+			any existing instance of LINQPad.</li>
+		<li>Shortcut keys for options such as commenting/uncommented have been aligned with
+			VS2010. If you prefer the old shortcuts, you can re-enable them in Edit | Preferences.</li>
+	</ul>
+	<p>
+		This version also includes a number of autocompletion enhancements:</p>
+	<ul>
+		<li>Autocompletion lists come up as soon as you start typing. (If you don&#39;t like
+			this feature, you can disable it in Edit | Preferences).</li>
+		<li>Autocompletion lists are now filtered like in VS2010, so typing &#39;customer&#39;
+			will filter the list to members that contain the word &#39;customer&#39; anywhere
+			in their name. You can also type just the upper-case "humps" of a member - so typing
+			tca will show ToCharArray.</li>
+		<li>An option now appears in member lists to hide extensions methods. This is great
+			when you want to browse just instance methods.</li>
+		<li>Code snippets are fully supported. All of the standard VS C# snippets are included
+			- plus a number of extras to help with LINQ queries. The shortcuts are listed on
+			the Edit menu and are identical to VS2010 (including the ability to type the snippet's
+			shortcut and then Tab). Any custom VS snippets in My Documents / Visual Studio 20XX
+			/ Code Snippets / Visual C# are also imported automatically.</li>
+		<li>With most query operators, you can press Tab from the member listing to insert a
+			snippet for that operator.</li>
+		<li>The dialog for adding references and namespaces (F4) includes a new button to save
+			reference/namespace combinations to code snippets. You can then recall these combinations
+			by typing the name of the snippet and Tab (or activating the Code Snippets listing
+			from the Edit menu).</li>
+		<li>When selecting into an anonymous type, an option appears to lets you select multiple
+			items from member lists (the LINQPad 'power-tick'). This works even through parent
+			associations.</li>
+		<li>The smarttag for importing additional namespaces now works without having to first
+			add a reference to an assembly. Just type 'new textbox', for example, and a smarttag
+			will invite you to choose from all the TextBox types in the .NET Framework.</li>
+		<li>Outlining and #region tags are supported for queries of type 'Program'.</li>
+		<li>The autocompletion engine is faster with complex expressions.</li>
+	</ul>
+	<h2>
+		Version 2.10 / 4.10</h2>
+	<ul>
+		<li>LINQPad exposes a new extensiblity model that lets you offer first-class support
+			for third-party ORMs and other querying sources. Visit <a href="http://www.linqpad.net/Extensibility.aspx">
+				http://www.linqpad.net/Extensibility.aspx</a> for information on writing a driver.</li>
+		<li>You can now query WCF Data Services as easily as a database. Click 'Add Connection'
+			and then click the 'Data Services' radio button.</li>
+		<li>SQL Azure is now fully supported. Just click the 'Azure' radio button in the connection
+			dialog.</li>
+		<li>A single-click plugin is available to query SQLite and MySQL Enterprise/Community
+			servers via the IQToolkit. To download, click 'Add Connection', and then click 'View
+			more drivers'.</li>
+		<li>LINQPad now lets you specify an arbitrary provider and connection string when connecting
+			to an Entity Framework EDM. This means you can use third-party EF providers that
+			support other databases such as Oracle or Sqlite.</li>
+		<li>SQL CE databases larger than 256MB are now supported via an option on the Connection
+			dialog.</li>
+		<li>There's now a button to the right of 'Results' that exports results into Excel or
+			Word - with or without formatting.</li>
+		<li>With queries that Dump multiple result sets or values, LINQPad now displays data
+			in the output window as soon as it becomes available.</li>
+		<li>You can now define extension methods in queries of type 'C# Program'. Just write
+			a static class below the Main method with the desired extension methods.</li>
+		<li>There's a new 'Find All' option on the Edit menu that searches all queries and samples.</li>
+		<li>You can inject hyperlinks into the output by instantiating the new Hyperlinq class.
+			You can populate a Hyperlinq with either an ordinary URL or a query that will execute
+			in another window when clicked.</li>
+		<li>You can create additional DataContexts of the same schema by instantiating the UserQuery
+			class, passing in a new connection or connection string.</li>
+		<li>There's now a 'Close all connections' option on the Connection context menu. This
+			is handy when you want to drop a database.</li>
+		<li>LINQPad supports SSL connections to SQL Server via a new checkbox on the connection
+			dialog.</li>
+		<li>On the Edit menu, there's a new 'Execute Shell Command' option which inserts a calls
+			a helper method that lets you easily execute operating system commands. The output
+			is returned as an array of lines, and is written to LINQPad's output window.</li>
+		<li>In Edit | Preferences, there's a new Advanced tab with more customization options,
+			including options for editor tabs and column widths.</li>
+		<li>Performance has improved considerably with very large schemas (more than 1000 tables).</li>
+		<li>The System.Transactions assembly + namespace is now automatically imported.</li>
+	</ul>
+	<h2>
+		Version 1.35</h2>
+	<ul>
+		<li>LINQPad now provides first-class support for 1:1 relationships and single-character
+			columns. This means that references now appear on both sides of 1:1 relationships
+			(rather than an EntitySet) and CHAR(1) / NVARCHAR(1) columns map to System.Char
+			rather than System.String. Because this may break compatibility with previously
+			written queries, these enhancements can be turned off globally under Edit | Preferences.</li>
+		<li>Custom LINQ to SQL and Entity Framework classes are now supported. This means you
+			can query those typed DataContext and ObjectContext classes that you've tweaked
+			for hours in Visual Studio - as easily as querying directly against a database.
+			Simply click 'Add Connection', and select 'Custom LINQ to SQL DataContext' or 'Custom
+			Entity Framework ObjectContext' in the combobox at the top. LINQPad will still display
+			full SQL translations for every query - whether it uses LINQ to SQL or Entity Framework.</li>
+		<li>With long-running queries, the SQL and lambda translations are now visible immediately
+			after starting the query.</li>
+		<li>The SQL translation pane now formats the parameters such that the entire query can
+			be copied and pasted into SQL Management Studio. And there's a new option to do
+			exactly that in one step (under 'Analyze SQL' on the SQL pane). This is useful when
+			you want to examine a query's execution plan.</li>
+		<li>When using an Entity Framework ObjectContext, you can test Entity-SQL queries by
+			selecting ESQL in the language dropdown.</li>
+		<li>When you cancel a running LINQ to SQL (or EF) query, LINQPad now tracks down and
+			explicitly cancels the associated SqlCommand right away to avoid wasting resources.</li>
+		<li>Autocompletion now supports smart tags for importing additional namespaces, autocompletion
+			for indexers, and enhanced functionality when assigning and comparing enum values.</li>
+		<li>You can now edit stored procedures, functions and views within LINQPad (right-click
+			on the object in the TreeView).</li>
+		<li>LINQPad now formats 2-dimensional arrays of simple element types nicely in matrix
+			form.</li>
+		<li>A number of bugs have been fixed, including a memory leak causing queries not to
+			release memory when closed.</li>
+		<li>There's now a MRU on the File menu and several new keyboard shortcuts - see 'Keyboard
+			Shortcuts' on the Help menu for a complete list.</li>
+		<li>Unsafe code blocks are now supported when querying in C#.</li>
+	</ul>
+	<h2>
+		Version 1.32</h2>
+	<ul>
+		<li>The query 'language' dropdown now includes two new options: 'C# Program' and 'VB
+			Program'. These serve a similar role to 'C# Statements' and 'VB Statements' except
+			that they also let you write additional methods and classes.</li>
+		<li>LINQPad now supports SQL Compact Edition.</li>
+		<li>The results pane now has a new tab that shows the IL translation of your queries
+			or C#/VB code snippets.</li>
+		<li>LINQPad now displays totals of numeric result columns, and simple graphs if you
+			click the ≡ symbol on the column header.</li>
+		<li>Autocompletion now supports object creation and object initialization expressions.</li>
+		<li>The autocompletion cache automatically refreshes itself when you rebuild referenced
+			assemblies.</li>
+		<li>Under Edit | Preferences, you can increase the maximum number of rows returned in
+			a single query (up to 10,000) and set the default query language to something other
+			than C# Expression.</li>
+	</ul>
+	<h2>
+		Previous Enhancements</h2>
+	<ul>
+		<li>LINQPad now supports autocompletion for C# queries, as an optional feature. <a
+			href="http://www.linqpad.net/Purchase.aspx">Click here</a> for details.</li>
+		<li>Middle-clicking a query in My Queries or Sample Queries forces the query to open
+			in a new tab.</li>
+		<li>LINQPad has a new mode for supporting cordless presenters - see the FAQ on the Help
+			menu for details.</li>
+		<li>The "My Queries" path is customizable - click "Set Folder" or go to Edit | Preferences.
+			Also, under Edit | Preferences, you can customize the style sheet used for displaying results.</li>
+		<li>Inline table-value functions are now supported (as well as views and scalar functions).
+			Table-valued and inline functions return strongly-typed sequences, upon which you
+			can perform further querying.</li>
+		<li>You can rearrange queries by dragging their tabs, and close them by middle-clicking.</li>
+		<li>You can increase/decrease the editor font size by pressing Control+Plus / Control+Minus,
+			as well as using Control+ScrollWheel.</li>
+		<li>LINQPad now accepts command-line arguments indicating query file(s) to open. This
+			allows you to associate the .linq file extension with LINQPad. You can also now
+			drag files from Windows Explorer onto LINQPad.</li>
+		<li>You can clone a query in a single operation - press Shift+Control+C.</li>
+		<li>SQL queries now support the 'GO' keyword for batching, and allow you to keep transactions
+			open between queries. </li>
+		<li>You can now control pluralization and capitalization options on the connection properties
+			dialog. </li>
+		<li>You can now reference custom assemblies and import additional namespaces! Go to
+			Advanced Properties on the query menu (or press F4). </li>
+	</ul>
+</body>
+</html>

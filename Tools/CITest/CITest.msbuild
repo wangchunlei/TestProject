@@ -1,0 +1,28 @@
+<Project DefaultTargets="Compile" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<BuildArtifactsDir Include="BuildArtifacts" />
+		<SolutionFile Include="CITest.sln"/>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+		<BuildPlatform Condition=" '$(BuildPlatform)' == '' ">Any CPU</BuildPlatform>
+	</PropertyGroup>
+
+	<Target Name="Compile" DependsOnTargets="Init">
+		<MSBuild Projects="@(SolutionFile)" Targets="Rebuild" 
+				 Properties="OutDir=%(BuildArtifactsDir.FullPath);Configuration=$(Configuration);Platform=$(BuildPlatform)" />
+	</Target>
+	<Target Name="EchoGreeting">
+		<Exec Command="echo Hello from MSBuild" />
+	</Target>
+	<Target Name="Init" DependsOnTargets="Clean">
+		<MakeDir Directories="@(BuildArtifactsDir)" />
+	</Target>
+	<Target Name="Clean">
+		<RemoveDir Directories="@(BuildArtifactsDir" />
+	</Target>
+	<Target Name="EchoDate">
+		<Exec Command="echo %25date%25" />
+	</Target>
+</Project>

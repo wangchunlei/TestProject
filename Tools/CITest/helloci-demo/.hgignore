@@ -1,0 +1,10 @@
+syntax: glob
+HelloCI.Web.UnitTests/bin/
+HelloCI.Web.UnitTests/obj/
+HelloCI.Web/bin/
+HelloCI.Web/obj/
+HelloCI.sln.docstates
+HelloCI.suo
+packages/
+HelloCI.Web/HelloCI.Web.csproj.user
+BuildArtifacts/
