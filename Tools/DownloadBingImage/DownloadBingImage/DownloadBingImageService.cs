@@ -16,18 +16,26 @@ namespace DownloadBingImage
         public DownloadBingImageService()
         {
             InitializeComponent();
-            
+
+            log = Domas.DAP.ADF.LogManager.LogManager.GetLogger("Service");
         }
 
+        private Domas.DAP.ADF.LogManager.ILogger log = null;
+        public void Start(string[] args)
+        {
+            OnStart(args);
+        }
         protected override void OnStart(string[] args)
         {
             var interval = System.Configuration.ConfigurationSettings.AppSettings["interval"];
-            int intervalMin = 0;
+            int intervalMin = int.MaxValue;
             int.TryParse(interval, out intervalMin);
-            Timer timer = new Timer(delegate
+            log.Debug("服务启动，下次下载" + intervalMin + "分钟后");
+            timer = new Timer(delegate
             {
+                log.Debug(string.Format("开始下载"));
                 BingImages.DownLoadImages();
-            }, null, TimeSpan.FromMilliseconds(0), TimeSpan.FromMinutes(intervalMin));
+            }, null, TimeSpan.FromMilliseconds(10), TimeSpan.FromMinutes(intervalMin));
         }
 
         protected override void OnStop()

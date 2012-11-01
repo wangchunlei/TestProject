@@ -11,17 +11,23 @@ namespace DownloadBingImage
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[] 
-			{ 
-				new DownloadBingImageService()
-				    {
-				        
-				    }
-			};
-            ServiceBase.Run(ServicesToRun);
+            if (args != null && args.Length > 0)
+            {
+                var dbis = new DownloadBingImageService();
+                dbis.Start(args);
+
+            }
+            else
+            {
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[] 
+			                    { 
+				                    new DownloadBingImageService()
+			                    };
+                ServiceBase.Run(ServicesToRun);
+            }
         }
     }
 }
