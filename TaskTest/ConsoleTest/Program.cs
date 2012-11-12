@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ConsoleTest.INotify;
 
 namespace ConsoleTest
 {
@@ -8,11 +9,17 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
-            String s = new String();
+            var foo = new Foo();
+            foo.PropertyChanged += foo_PropertyChanged;
+            foo.CustomerName = "12";
 
-            Console.WriteLine(s.s);
-            s.Console(a: "123", b: 0x1);
-            Console.ReadKey(true);
+            Console.ReadKey(false);
+        }
+
+        static void foo_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var arg = e as PropertyChangedArgs;
+            Console.WriteLine(arg.PropertyName + " 变化,由{0}变成{1}", arg.OldValue, arg.NewValue);
         }
     }
 
