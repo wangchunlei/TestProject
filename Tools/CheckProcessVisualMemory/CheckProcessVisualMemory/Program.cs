@@ -55,7 +55,7 @@ namespace CheckProcessVisualMemory
             return memoryUsage;
         }
 
-        private void lll()
+        private void AllocateMemory(int maxtCount)
         {
             //try
             //{
