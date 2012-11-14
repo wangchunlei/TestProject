@@ -58,7 +58,15 @@ namespace DownloadBingImage
                             if (IsNetworkAvailable())
                             {
                                 log.Debug(string.Format("开始下载"));
-                                BingImages.DownLoadImages();
+                                try
+                                {
+                                    BingImages.DownLoadImages();
+                                }
+                                catch (Exception e)
+                                {
+                                    log.Error(e.GetBaseException());
+                                }
+
                             }
                             else
                             {
