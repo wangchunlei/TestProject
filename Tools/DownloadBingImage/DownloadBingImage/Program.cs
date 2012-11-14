@@ -16,7 +16,7 @@ namespace DownloadBingImage
         /// </summary>
         static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += (o, e) => log.Error("123123123213");
+            AppDomain.CurrentDomain.UnhandledException += (o, e) => log.Error((Exception)e.ExceptionObject);
             if (Environment.UserInteractive)
             {
                 var dbis = new DownloadBingImageService();
