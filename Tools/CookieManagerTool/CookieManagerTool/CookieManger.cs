@@ -1,58 +1,76 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Web;
+using Domas.DAP.ADF.LogManager;
 using Domas.DAP.ADF.Security;
 
-namespace Domas.DAP.ADF.Cookie
+namespace CookieManagerTool
 {
     public class CookieManger
     {
         [DllImport("wininet.dll", SetLastError = true)]
         protected static extern bool InternetGetCookie(string url, string cookieName, StringBuilder cookieData, ref int size);
         [DllImport("wtsapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool WTSQueryUserToken(int sessionId, out IntPtr tokenHandle);
-
+        static extern bool WTSQueryUserToken(uint sessionId, out IntPtr tokenHandle);
+        [DllImport("ieframe.dll", CharSet = CharSet.Auto)]
+        internal static extern int IEIsProtectedModeURL(string url);
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern uint WTSGetActiveConsoleSessionId();
-        public static CookieContainer GetUriCookieContainer(Uri uri)
+        [DllImport("ieframe.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int IEGetProtectedModeCookie(String url, String cookieName, StringBuilder cookieData, ref int size, uint flag);
+
+        static ILogger logger = Domas.DAP.ADF.LogManager.LogManager.GetLogger("GetCookie");
+        public static void Impersonate(Action method)
         {
-            var logger = Domas.DAP.ADF.LogManager.LogManager.GetLogger("GetCookie");
-            CookieContainer cookies = null;
             var windowsIdentity = WindowsIdentity.GetCurrent();
             if (windowsIdentity != null && windowsIdentity.IsSystem)
             {
-                logger.Debug(string.Format("当前用户{0}", windowsIdentity.Name));
-                int sessionID = (int)WTSGetActiveConsoleSessionId();
-                if (sessionID != -1)
+                uint sessionID = WTSGetActiveConsoleSessionId();
+                if (sessionID == 3)
                 {
-                    System.IntPtr currentToken = IntPtr.Zero;
-                    bool bRet = WTSQueryUserToken(sessionID, out currentToken);
-                    using (WindowsImpersonationContext impersonatedUser = WindowsIdentity.Impersonate(currentToken))
-                    {
-                        cookies = GetUriCookieContainer(uri);
-                        if (cookies == null)
-                        {
-                            logger.Debug("没有取到");
-                            string cookieValue = string.Empty;
-                            GetCookie_InternetExplorer(uri.Host, "userinfo", ref cookieValue);
-                            logger.Debug(cookieValue);
-                            if (!string.IsNullOrEmpty(cookieValue))
-                            {
-                                cookies = new CookieContainer();
-                                cookies.Add(uri, new System.Net.Cookie("userinfo", cookieValue));
-                            }
-                        }
-
-                    }
+                    sessionID = 0xFFFFFFFF;
                 }
-                return cookies;
+                System.IntPtr currentToken = IntPtr.Zero;
+                bool bRet = WTSQueryUserToken(sessionID, out currentToken);
+
+                using (WindowsImpersonationContext impersonatedUser = WindowsIdentity.Impersonate(currentToken))
+                {
+                    method();
+                }
             }
+            else
+            {
+                method();
+            }
+        }
+        public static T Impersonate<T>(Func<T> method)
+        {
+            var windowsIdentity = WindowsIdentity.GetCurrent();
+            if (windowsIdentity != null && windowsIdentity.IsSystem)
+            {
+                uint sessionID = WTSGetActiveConsoleSessionId();
+                if (sessionID == 3)
+                {
+                    sessionID = 0xFFFFFFFF;
+                }
+                System.IntPtr currentToken = IntPtr.Zero;
+                bool bRet = WTSQueryUserToken(sessionID, out currentToken);
+                using (WindowsImpersonationContext impersonatedUser = WindowsIdentity.Impersonate(currentToken))
+                {
+                    return method();
+                }
+            }
+
+            return method();
+        }
+        public static CookieContainer GetUriCookieContainer(Uri uri, string cookieName = "userinfo")
+        {
+            CookieContainer cookies = null;
 
             //定义Cookie数据的大小。
             int datasize = 256;
@@ -62,20 +80,52 @@ namespace Domas.DAP.ADF.Cookie
                 if (datasize < 0) return null;
                 // 确信有足够大的空间来容纳Cookie数据。
                 cookieData = new StringBuilder(datasize);
-                if (!InternetGetCookie(uri.ToString(), null, cookieData, ref datasize)) return null;
+                if (!InternetGetCookie(uri.ToString(), null, cookieData, ref datasize))
+                {
+                    var isPMUrl = IEIsProtectedModeURL(uri.AbsoluteUri);
+                    if (isPMUrl == 0)
+                    {
+                        var hResult = IEGetProtectedModeCookie(uri.AbsoluteUri, null, cookieData, ref datasize, 0);
+                        if (0 != hResult)
+                        {
+                            cookieData.EnsureCapacity(datasize);
+                            IEGetProtectedModeCookie(uri.AbsoluteUri, null, cookieData, ref datasize, 0);
+                        }
+                    }
+                }
             }
             if (cookieData.Length > 0)
             {
                 cookies = new CookieContainer();
                 cookies.SetCookies(uri, cookieData.ToString().Replace(';', ','));
             }
+            if (cookies == null)
+            {
+                Impersonate(() =>
+                {
+                    string cookieValue = string.Empty;
+                    var strPath = Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
+                    if (IEIsProtectedModeURL(uri.AbsoluteUri) == 0)
+                    {
+                        logger.Debug("look up in low");
+                        Path.Combine(strPath, "low");
+                    }
+
+                    GetCookie_InternetExplorer(uri.Host, cookieName, ref cookieValue, strPath);
+                    if (!string.IsNullOrEmpty(cookieValue))
+                    {
+                        cookies = new CookieContainer();
+                        cookies.Add(uri, new System.Net.Cookie(cookieName, cookieValue));
+                    }
+                });
+            }
             return cookies;
         }
-        private static bool GetCookie_InternetExplorer(string strHost, string strField, ref string Value)
+        private static bool GetCookie_InternetExplorer(string strHost, string strField, ref string Value, string strPath)
         {
             Value = string.Empty;
             bool fRtn = false;
-            string strPath, strCookie;
+            string strCookie;
             string[] fp;
             StreamReader r;
             int idx;
@@ -83,7 +133,7 @@ namespace Domas.DAP.ADF.Cookie
             try
             {
                 strField = strField + "\n";
-                strPath = Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
+                ;
                 //Version v = Environment.OSVersion.Version;
 
                 fp = Directory.GetFiles(strPath, "*.txt");
