@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="CookieManger.cs" />
     <Compile Include="Interop.cs" />
+    <Compile Include="ProcessStarter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Win32Native.cs" />

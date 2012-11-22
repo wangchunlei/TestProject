@@ -32,41 +32,54 @@ namespace ServiceStart
         {
             var log = Domas.DAP.ADF.LogManager.LogManager.GetLogger("cookie");
 
-            
-            var proxy = new Domas.Service.Print.PrintTask.POProxy();
-            proxy.GetPrintSetting("P2012111400029");
-            proxy.FindByBusinessKey("P2012111400029");
-            timer = new Timer(1000 * 10);
-            timer.Enabled = true;
-            timer.Elapsed += (sender, e) =>
-                {
-                    try
+
+            //var proxy = new Domas.Service.Print.PrintTask.POProxy();
+            //proxy.GetPrintSetting("P2012111400029");
+            //proxy.FindByBusinessKey("P2012111400029");
+            //timer = new Timer(1000 * 10);
+            //timer.Enabled = true;
+            //timer.Elapsed += (sender, e) =>
+            //    {
+            //        try
+            //        {
+            //            Domas.DAP.ADF.Cookie.CookieManger.Impersonate(() =>
+            //                {
+            //                    var cookie = Domas.DAP.ADF.Cookie.CookieManger.GetUriCookieContainer(new Uri("http://127.0.0.1"));
+            //                    var c = cookie.GetCookies(new Uri("http://127.0.0.1"))[0];
+            //                    var u = Domas.DAP.ADF.Cookie.CookieManger.DecryCookie(c.Value);
+
+            //                    log.Debug(u.UserID + "," + u.UserCode + "," + u.UserName);
+
+            //                });
+
+
+
+
+            //            Domas.DAP.ADF.NotifierClient.NotifierClient.Start("http://127.0.0.1", (ex) =>
+            //                {
+
+            //                });
+
+
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            log.Error(ex.GetBaseException());
+            //        }
+            //    };
+            try
+            {
+                Domas.DAP.ADF.Cookie.CookieManger.Impersonate(() =>
                     {
-                        Domas.DAP.ADF.Cookie.CookieManger.Impersonate(() =>
-                            {
-                                var cookie = Domas.DAP.ADF.Cookie.CookieManger.GetUriCookieContainer(new Uri("http://127.0.0.1"));
-                                var c = cookie.GetCookies(new Uri("http://127.0.0.1"))[0];
-                                var u = Domas.DAP.ADF.Cookie.CookieManger.DecryCookie(c.Value);
+                        Process.Start("notepad.exe");
+                    });
 
-                                log.Debug(u.UserID + "," + u.UserCode + "," + u.UserName);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.GetBaseException());
+            }
 
-                            });
-
-
-                        
-
-                        Domas.DAP.ADF.NotifierClient.NotifierClient.Start("http://127.0.0.1", (ex) =>
-                            {
-
-                            });
-
-                        
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Error(ex.GetBaseException());
-                    }
-                };
         }
 
         protected override void OnStop()
