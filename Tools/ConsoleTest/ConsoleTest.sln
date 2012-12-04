@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{6A7F519F-45AE-44D5-8594-7623930DAB2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceMonitor", "ConsoleTest\ServiceMonitor.csproj", "{6A7F519F-45AE-44D5-8594-7623930DAB2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLMeger", "XMLMeger\XMLMeger.csproj", "{C0893067-AF1B-4FDB-8BB7-F3EF2A8753D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{6A7F519F-45AE-44D5-8594-7623930DAB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A7F519F-45AE-44D5-8594-7623930DAB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A7F519F-45AE-44D5-8594-7623930DAB2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0893067-AF1B-4FDB-8BB7-F3EF2A8753D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0893067-AF1B-4FDB-8BB7-F3EF2A8753D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0893067-AF1B-4FDB-8BB7-F3EF2A8753D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0893067-AF1B-4FDB-8BB7-F3EF2A8753D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
