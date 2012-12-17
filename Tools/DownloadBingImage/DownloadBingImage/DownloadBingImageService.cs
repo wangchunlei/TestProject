@@ -66,7 +66,6 @@ namespace DownloadBingImage
                                 {
                                     log.Error(e.GetBaseException());
                                 }
-
                             }
                             else
                             {
