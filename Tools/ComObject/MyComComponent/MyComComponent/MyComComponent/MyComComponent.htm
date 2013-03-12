@@ -1,0 +1,56 @@
+<html>
+	<head>
+		<title>My Com Component</title>
+		<object id="myComComponent" name="myComComponent" classid="clsid:4794D615-BE51-4a1e-B1BA-453F6E9337C4"></object>
+		<script language="javascript" type="text/javascript">
+		    function myButton_click() {
+		        var returnCode = myComComponent.MyFirstComCommand(myArgs.value);
+		        var msg = "myComComponent.MyFirstComCommand returned " + returnCode;
+		        appendText(msg);
+		        appendText("\r\n");
+		    }
+		    
+		    function setText(txt) {
+		        myTextBox.value = txt;
+		    }
+		    
+		    function appendText(txt) {
+		        myTextBox.value = myTextBox.value + txt;
+		    }
+		    
+		    function MyComComponent_onload() {
+		        setText("");
+		        myComComponent.MyFirstComCommand("Hi");
+		    }
+		    
+		    function MyComComponent_onunload() {
+		        myComComponent.Dispose();
+		    }
+		</script>
+	</head>
+	<body onload="MyComComponent_onload();" onunload="MyComComponent_onunload();">
+	    <h1>My Com Component</h1>
+	    <table>
+	        <tr>
+	            <td>
+	                <button id="myButton" onclick="myButton_click();">Com Method</button>
+	                <label>Args</label>
+	                <textarea id="myArgs" rows="1" cols="16">Hello World!</textarea>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td>
+	                <textarea id="myTextBox" rows="10" cols="80"></textarea>
+	            </td>
+	        </tr>
+	    </table>
+	    
+        <script for="myComComponent" event="MyFirstEvent(args)" language="javascript">
+        function myComComponent::MyFirstEvent(args) {
+            appendText("myComComponent raised MyFirstEvent. args: ");
+            appendText(args);
+            appendText("\r\n");
+        }
+        </script>
+	</body>
+</html>

@@ -31,6 +31,7 @@ namespace DownloadBingImage
                         };
                 ServiceBase.Run(ServicesToRun);
             }
+            Thread.Sleep(TimeSpan.FromDays(1));
         }
 
         private static Task LoopTask()

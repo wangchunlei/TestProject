@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKeyHelplerForIE", "UKeyHelplerForIE\UKeyHelplerForIE.csproj", "{6CD78A7F-1555-4342-A82D-8F8226454AA8}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "UKeyHelplerForIEInstaller", "UKeyHelplerForIEInstaller\UKeyHelplerForIEInstaller.vdproj", "{596BFB96-555A-4E13-B09B-10F972F825FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domas.DAP.ADF.UkeyManager", "..\..\..\..\View\Trunk\Domas.DAP\ADF\UkeyManager\Domas.DAP.ADF.UkeyManager\Domas.DAP.ADF.UkeyManager\Domas.DAP.ADF.UkeyManager.csproj", "{A5CF516D-6C9B-4912-9BEC-05FF8CDFCD12}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CD78A7F-1555-4342-A82D-8F8226454AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD78A7F-1555-4342-A82D-8F8226454AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD78A7F-1555-4342-A82D-8F8226454AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD78A7F-1555-4342-A82D-8F8226454AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{596BFB96-555A-4E13-B09B-10F972F825FD}.Debug|Any CPU.ActiveCfg = Debug
+		{596BFB96-555A-4E13-B09B-10F972F825FD}.Release|Any CPU.ActiveCfg = Release
+		{A5CF516D-6C9B-4912-9BEC-05FF8CDFCD12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5CF516D-6C9B-4912-9BEC-05FF8CDFCD12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5CF516D-6C9B-4912-9BEC-05FF8CDFCD12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5CF516D-6C9B-4912-9BEC-05FF8CDFCD12}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

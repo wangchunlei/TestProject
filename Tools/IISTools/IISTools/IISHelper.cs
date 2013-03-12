@@ -6,7 +6,7 @@ using Microsoft.Web.Administration;
 
 namespace IISTools
 {
-    internal static class IISHelper
+    public static class IISHelper
     {
         public class AppPoolDTO
         {

@@ -94,7 +94,8 @@ namespace DownloadBingImage
 
             // Should now have 1415620951 from above example
             // Create path to save image to
-            return string.Format(@"{0}\{1}", DOWNLOAD_PATH, url.Split('%')[1]);
+
+            return string.Format(@"{0}\{1}", DOWNLOAD_PATH, url.Split('/').LastOrDefault());
         }
 
         /// <summary>

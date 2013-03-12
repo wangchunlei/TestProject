@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IISTools", "IISTools\IISTools.csproj", "{CAE9D26D-F176-4F36-9AB7-3E82605F8FCD}"
+EndProject
+Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "PowerShellTool", "PowerShellTool\PowerShellTool.pssproj", "{62AD843C-E97F-4076-B483-9839BACFC56D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{CAE9D26D-F176-4F36-9AB7-3E82605F8FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAE9D26D-F176-4F36-9AB7-3E82605F8FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAE9D26D-F176-4F36-9AB7-3E82605F8FCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62AD843C-E97F-4076-B483-9839BACFC56D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62AD843C-E97F-4076-B483-9839BACFC56D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62AD843C-E97F-4076-B483-9839BACFC56D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62AD843C-E97F-4076-B483-9839BACFC56D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

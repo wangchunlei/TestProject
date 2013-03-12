@@ -9,7 +9,7 @@ using System.Text;
 
 namespace IISTools
 {
-    internal static class Managerment
+    public static class Managerment
     {
         /// <summary>
         /// 创建用户

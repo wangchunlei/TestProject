@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSAExtensions", "RSAExtensions\RSAExtensions.csproj", "{056A2EB1-7902-44A4-98B6-64748E5D9BFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSAExtensions.Tests", "RSAExtensions.Tests\RSAExtensions.Tests.csproj", "{361A2798-A5F9-4306-9A81-2E6E113EA9D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2EEC998E-5ACE-4160-A963-CD8A5FC6ED7D}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		RSAExtensions.vsmdi = RSAExtensions.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = RSAExtensions.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{056A2EB1-7902-44A4-98B6-64748E5D9BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{056A2EB1-7902-44A4-98B6-64748E5D9BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{056A2EB1-7902-44A4-98B6-64748E5D9BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{056A2EB1-7902-44A4-98B6-64748E5D9BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{361A2798-A5F9-4306-9A81-2E6E113EA9D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{361A2798-A5F9-4306-9A81-2E6E113EA9D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{361A2798-A5F9-4306-9A81-2E6E113EA9D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{361A2798-A5F9-4306-9A81-2E6E113EA9D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
