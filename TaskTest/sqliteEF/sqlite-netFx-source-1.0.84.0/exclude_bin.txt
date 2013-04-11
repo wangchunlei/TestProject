@@ -1,0 +1,7 @@
+*.done
+*.exp
+*.lib
+*.map
+*.mda.config
+*EnvDTE.*
+*Microsoft.*
