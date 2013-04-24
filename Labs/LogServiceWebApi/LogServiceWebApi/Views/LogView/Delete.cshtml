@@ -1,0 +1,68 @@
+﻿@model LogServiceWebApi.Models.LogModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>LogModel</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LogName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LogName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ReportDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ReportDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.EventID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EventID)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.User)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.User)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Computer)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Computer)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.OperatorCode)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.OperatorCode)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Detail)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Detail)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}
