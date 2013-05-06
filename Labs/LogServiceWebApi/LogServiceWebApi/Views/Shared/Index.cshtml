@@ -1,13 +1,12 @@
 @using BootstrapSupport
-@model System.Collections.IEnumerable  
-<h4>@Model.GetLabel() <small>Listing</small></h4>
-<table id="example" border="0" cellpadding="0" cellspacing="0" width="100%" class="dataTable">
+@model System.Collections.IEnumerable   
+    <h4>@Model.GetLabel() <small>Listing</small></h4>
+<table class="table table-striped">
     <caption></caption>
     <thead>
         <tr>
             @foreach (var property in Model.VisibleProperties())
             {
-
                 <th>
                     @property.GetLabel().ToSeparatedWords()
                 </th>
@@ -15,24 +14,20 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-        @{ int index = 0; }
-        @foreach (var model in Model)
+    @{ int index = 0; }
+    @foreach (var model in Model)
     {
         ViewData[index.ToString()] = model;
-
-            <tr>
-                @foreach (var property in model.VisibleProperties())
+        <tr>
+            @foreach (var property in model.VisibleProperties())
             {
-
-                    <td>
-                        @Html.Display(index + "." + property.Name)
-                    </td>                    
+                <td>
+                    @Html.Display(index + "." + property.Name)
+                </td>                    
             }
-            </tr>
+        </tr>
             index++;
     }
-    </tbody>
-</table>
 
+</table>
 
