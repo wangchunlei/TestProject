@@ -1,0 +1,34 @@
+﻿
+Rob Conery
+* for his inspiring MVC starter kit
+http://blog.wekeroad.com/
+
+Nerd Dinner
+ * for OpenID integration
+ http://www.nerddinner.com
+
+Elmah:
+
+(using a custom controller factory)
+http://blog.rajan.net.in/2009/12/20/UsingBitFactoryLoggingInASPNETMVCHandleError.aspx
+
+Rss Feeds:
+http://damieng.com/blog/2010/04/26/creating-rss-feeds-in-asp-net-mvc
+
+Log4Net:
+http://logging.apache.org/log4net/
+
+Paging:
+http://github.com/martijnboland/MvcPaging
+
+Helpers
+=========
+
+Duration formatter
+http://samscode.com/index.php/2009/12/timespan-or-datetime-to-friendly-duration-text-e-g-3-days-ago/
+
+Fuzzy date/times
+http://stackoverflow.com/questions/887189/fuzzy-date-time-picker-control-in-c-net
+
+Convertings string to different cases
+http://blog.csharphelper.com/2010/06/13/convert-strings-between-pascal-case-camel-case-and-proper-case-in-c.aspx?ref=rss

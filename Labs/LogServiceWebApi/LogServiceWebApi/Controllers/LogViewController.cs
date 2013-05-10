@@ -18,7 +18,9 @@ namespace LogServiceWebApi.Controllers
 
         public ActionResult Index()
         {
-            return View(db.All.ToList());
+            Log4netSqlite.Program.PersistentData();
+            var data = Log4netSqlite.Program.Query("").ToList();
+            return View(data);
         }
 
         //

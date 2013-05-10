@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MvcLoggingDemoModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="MvcLoggingDemoModelStoreContainer">
+          <EntitySet Name="ELMAH_Error" EntityType="MvcLoggingDemoModel.Store.ELMAH_Error" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Log4Net_Error" EntityType="MvcLoggingDemoModel.Store.Log4Net_Error" store:Type="Tables" store:Schema="dbo" store:Name="Log4Net_Error">
+            <DefiningQuery>SELECT 
+      [Log4Net_Error].[Id] AS [Id], 
+      [Log4Net_Error].[Date] AS [Date], 
+      [Log4Net_Error].[Thread] AS [Thread], 
+      [Log4Net_Error].[Level] AS [Level], 
+      [Log4Net_Error].[Logger] AS [Logger], 
+      [Log4Net_Error].[Message] AS [Message], 
+      [Log4Net_Error].[Exception] AS [Exception]
+      FROM [dbo].[Log4Net_Error] AS [Log4Net_Error]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="NLog_Error" EntityType="MvcLoggingDemoModel.Store.NLog_Error" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="vw_aspnet_WebEvents_extended" EntityType="MvcLoggingDemoModel.Store.vw_aspnet_WebEvents_extended" store:Type="Views" store:Schema="dbo" store:Name="vw_aspnet_WebEvents_extended">
+            <DefiningQuery>SELECT 
+      [vw_aspnet_WebEvents_extended].[EventId] AS [EventId], 
+      [vw_aspnet_WebEvents_extended].[EventTimeUtc] AS [EventTimeUtc], 
+      [vw_aspnet_WebEvents_extended].[EventTime] AS [EventTime], 
+      [vw_aspnet_WebEvents_extended].[EventType] AS [EventType], 
+      [vw_aspnet_WebEvents_extended].[EventSequence] AS [EventSequence], 
+      [vw_aspnet_WebEvents_extended].[EventOccurrence] AS [EventOccurrence], 
+      [vw_aspnet_WebEvents_extended].[EventCode] AS [EventCode], 
+      [vw_aspnet_WebEvents_extended].[EventDetailCode] AS [EventDetailCode], 
+      [vw_aspnet_WebEvents_extended].[Message] AS [Message], 
+      [vw_aspnet_WebEvents_extended].[ApplicationPath] AS [ApplicationPath], 
+      [vw_aspnet_WebEvents_extended].[ApplicationVirtualPath] AS [ApplicationVirtualPath], 
+      [vw_aspnet_WebEvents_extended].[MachineName] AS [MachineName], 
+      [vw_aspnet_WebEvents_extended].[RequestUrl] AS [RequestUrl], 
+      [vw_aspnet_WebEvents_extended].[ExceptionType] AS [ExceptionType], 
+      [vw_aspnet_WebEvents_extended].[Details] AS [Details], 
+      [vw_aspnet_WebEvents_extended].[Level] AS [Level]
+      FROM [dbo].[vw_aspnet_WebEvents_extended] AS [vw_aspnet_WebEvents_extended]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+        <EntityType Name="ELMAH_Error">
+          <Key>
+            <PropertyRef Name="ErrorId" />
+          </Key>
+          <Property Name="ErrorId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Application" Type="nvarchar" Nullable="false" MaxLength="60" />
+          <Property Name="Host" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Type" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Source" Type="nvarchar" Nullable="false" MaxLength="60" />
+          <Property Name="Message" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="User" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="StatusCode" Type="int" Nullable="false" />
+          <Property Name="TimeUtc" Type="datetime" Nullable="false" />
+          <Property Name="Sequence" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="AllXml" Type="ntext" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'C:\USERS\DARRENW\DOCUMENTS\BLOG ENTRIES\LOGGING\PART 5\MVCAPPLICATION1\MVCAPPLICATION1\APP_DATA\SAMPLEDATABASE.MDF.dbo.Log4Net_Error' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="Log4Net_Error">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Thread" />
+            <PropertyRef Name="Level" />
+            <PropertyRef Name="Logger" />
+            <PropertyRef Name="Message" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Thread" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="Level" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Logger" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="Message" Type="varchar" Nullable="false" MaxLength="4000" />
+          <Property Name="Exception" Type="varchar" MaxLength="2000" />
+        </EntityType>
+        <EntityType Name="NLog_Error">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="time_stamp" Type="datetime" Nullable="false" />
+          <Property Name="host" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="type" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="source" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="level" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="logger" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="stacktrace" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="allxml" Type="ntext" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'C:\USERS\DARRENW\DOCUMENTS\BLOG ENTRIES\LOGGING\PART 5\MVCAPPLICATION1\MVCAPPLICATION1\APP_DATA\SAMPLEDATABASE.MDF.dbo.vw_aspnet_WebEvents_extended' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="vw_aspnet_WebEvents_extended">
+          <Key>
+            <PropertyRef Name="EventId" />
+            <PropertyRef Name="EventTimeUtc" />
+            <PropertyRef Name="EventTime" />
+            <PropertyRef Name="EventType" />
+            <PropertyRef Name="EventSequence" />
+            <PropertyRef Name="EventOccurrence" />
+            <PropertyRef Name="EventCode" />
+            <PropertyRef Name="EventDetailCode" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="Level" />
+          </Key>
+          <Property Name="EventId" Type="char" Nullable="false" MaxLength="32" />
+          <Property Name="EventTimeUtc" Type="datetime" Nullable="false" />
+          <Property Name="EventTime" Type="datetime" Nullable="false" />
+          <Property Name="EventType" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="EventSequence" Type="decimal" Nullable="false" Precision="19" />
+          <Property Name="EventOccurrence" Type="decimal" Nullable="false" Precision="19" />
+          <Property Name="EventCode" Type="int" Nullable="false" />
+          <Property Name="EventDetailCode" Type="int" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="1024" />
+          <Property Name="ApplicationPath" Type="nvarchar" MaxLength="256" />
+          <Property Name="ApplicationVirtualPath" Type="nvarchar" MaxLength="256" />
+          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="RequestUrl" Type="nvarchar" MaxLength="1024" />
+          <Property Name="ExceptionType" Type="nvarchar" MaxLength="256" />
+          <Property Name="Details" Type="ntext" />
+          <Property Name="Level" Type="nvarchar" Nullable="false" MaxLength="10" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MvcLoggingDemoModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="MvcLoggingDemoContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ELMAH_Error" EntityType="MvcLoggingDemoModel.ELMAH_Error" />
+          <EntitySet Name="Log4Net_Error" EntityType="MvcLoggingDemoModel.Log4Net_Error" />
+          <EntitySet Name="NLog_Error" EntityType="MvcLoggingDemoModel.NLog_Error" />
+          <EntitySet Name="vw_aspnet_WebEvents_extended" EntityType="MvcLoggingDemoModel.vw_aspnet_WebEvents_extended" />
+        </EntityContainer>
+        <EntityType Name="ELMAH_Error">
+          <Key>
+            <PropertyRef Name="ErrorId" />
+          </Key>
+          <Property Type="Guid" Name="ErrorId" Nullable="false" />
+          <Property Type="String" Name="Application" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Host" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Source" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Message" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="User" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="StatusCode" Nullable="false" />
+          <Property Type="DateTime" Name="TimeUtc" Nullable="false" />
+          <Property Type="Int32" Name="Sequence" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="AllXml" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Log4Net_Error">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Thread" />
+            <PropertyRef Name="Level" />
+            <PropertyRef Name="Logger" />
+            <PropertyRef Name="Message" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="Date" Nullable="false" />
+          <Property Type="String" Name="Thread" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Level" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Logger" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Message" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Exception" MaxLength="2000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="NLog_Error">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="time_stamp" Nullable="false" />
+          <Property Type="String" Name="host" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="type" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="source" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="message" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="level" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="logger" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="stacktrace" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="allxml" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vw_aspnet_WebEvents_extended">
+          <Key>
+            <PropertyRef Name="EventId" />
+            <PropertyRef Name="EventTimeUtc" />
+            <PropertyRef Name="EventTime" />
+            <PropertyRef Name="EventType" />
+            <PropertyRef Name="EventSequence" />
+            <PropertyRef Name="EventOccurrence" />
+            <PropertyRef Name="EventCode" />
+            <PropertyRef Name="EventDetailCode" />
+            <PropertyRef Name="MachineName" />
+            <PropertyRef Name="Level" />
+          </Key>
+          <Property Type="String" Name="EventId" Nullable="false" MaxLength="32" FixedLength="true" Unicode="false" />
+          <Property Type="DateTime" Name="EventTimeUtc" Nullable="false" />
+          <Property Type="DateTime" Name="EventTime" Nullable="false" />
+          <Property Type="String" Name="EventType" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="EventSequence" Nullable="false" Precision="19" Scale="0" />
+          <Property Type="Decimal" Name="EventOccurrence" Nullable="false" Precision="19" Scale="0" />
+          <Property Type="Int32" Name="EventCode" Nullable="false" />
+          <Property Type="Int32" Name="EventDetailCode" Nullable="false" />
+          <Property Type="String" Name="Message" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ApplicationPath" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ApplicationVirtualPath" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RequestUrl" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ExceptionType" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Details" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Level" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MvcLoggingDemoModelStoreContainer" CdmEntityContainer="MvcLoggingDemoContainer">
+          <EntitySetMapping Name="ELMAH_Error">
+            <EntityTypeMapping TypeName="MvcLoggingDemoModel.ELMAH_Error">
+              <MappingFragment StoreEntitySet="ELMAH_Error">
+                <ScalarProperty Name="AllXml" ColumnName="AllXml" />
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+                <ScalarProperty Name="TimeUtc" ColumnName="TimeUtc" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="User" ColumnName="User" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="Application" ColumnName="Application" />
+                <ScalarProperty Name="ErrorId" ColumnName="ErrorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Log4Net_Error">
+            <EntityTypeMapping TypeName="MvcLoggingDemoModel.Log4Net_Error">
+              <MappingFragment StoreEntitySet="Log4Net_Error">
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Logger" ColumnName="Logger" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Thread" ColumnName="Thread" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NLog_Error">
+            <EntityTypeMapping TypeName="MvcLoggingDemoModel.NLog_Error">
+              <MappingFragment StoreEntitySet="NLog_Error">
+                <ScalarProperty Name="allxml" ColumnName="allxml" />
+                <ScalarProperty Name="stacktrace" ColumnName="stacktrace" />
+                <ScalarProperty Name="logger" ColumnName="logger" />
+                <ScalarProperty Name="level" ColumnName="level" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="host" ColumnName="host" />
+                <ScalarProperty Name="time_stamp" ColumnName="time_stamp" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_aspnet_WebEvents_extended">
+            <EntityTypeMapping TypeName="MvcLoggingDemoModel.vw_aspnet_WebEvents_extended">
+              <MappingFragment StoreEntitySet="vw_aspnet_WebEvents_extended">
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="ExceptionType" ColumnName="ExceptionType" />
+                <ScalarProperty Name="RequestUrl" ColumnName="RequestUrl" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="ApplicationVirtualPath" ColumnName="ApplicationVirtualPath" />
+                <ScalarProperty Name="ApplicationPath" ColumnName="ApplicationPath" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="EventDetailCode" ColumnName="EventDetailCode" />
+                <ScalarProperty Name="EventCode" ColumnName="EventCode" />
+                <ScalarProperty Name="EventOccurrence" ColumnName="EventOccurrence" />
+                <ScalarProperty Name="EventSequence" ColumnName="EventSequence" />
+                <ScalarProperty Name="EventType" ColumnName="EventType" />
+                <ScalarProperty Name="EventTime" ColumnName="EventTime" />
+                <ScalarProperty Name="EventTimeUtc" ColumnName="EventTimeUtc" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="MvcLoggingDemo">
+        <EntityTypeShape EntityType="MvcLoggingDemoModel.ELMAH_Error" Width="1.5" PointX="0.5" PointY="0.5" Height="3.1340950520833317" />
+        <EntityTypeShape EntityType="MvcLoggingDemoModel.Log4Net_Error" Width="1.5" PointX="3.875" PointY="0.5" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="MvcLoggingDemoModel.NLog_Error" Width="1.5" PointX="2.25" PointY="0.5" Height="2.9417936197916674" />
+        <EntityTypeShape EntityType="MvcLoggingDemoModel.vw_aspnet_WebEvents_extended" Width="2.375" PointX="5.5" PointY="0.5" Height="4.0956022135416674" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

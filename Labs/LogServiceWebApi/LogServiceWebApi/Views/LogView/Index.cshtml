@@ -1,11 +1,72 @@
-﻿@model IEnumerable<LogServiceWebApi.Models.LogModel>
+﻿@model IEnumerable<dynamic>
 
 @{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .webgrid {
+        width: 50%;
+        border: 0px;
+        border-collapse: collapse;
+    }
+
+        .webgrid a {
+            color: #000;
+        }
+
+    .webgrid-header {
+        padding: 6px 5px;
+        text-align: center;
+        background-color: #e8eef4;
+        border-bottom: 2px solid #3966A2;
+        height: 40px;
+        border-top: 2px solid #D6E8FF;
+        border-left: 2px solid #D6E8FF;
+        border-right: 2px solid #D6E8FF;
+    }
+
+    .webgrid-footer {
+        padding: 6px 5px;
+        text-align: center;
+        background-color: #e8eef4;
+        border-top: 2px solid #3966A2;
+        height: 30px;
+        border-bottom: 2px solid #D6E8FF;
+        border-left: 2px solid #D6E8FF;
+        border-right: 2px solid #D6E8FF;
+    }
+
+    .webgrid-alternating-row {
+        height: 30px;
+        background-color: #f2f2f2;
+        border-bottom: 1px solid #d2d2d2;
+        border-left: 2px solid #D6E8FF;
+        border-right: 2px solid #D6E8FF;
+    }
+
+    .webgrid-row-style {
+        height: 30px;
+        border-bottom: 1px solid #d2d2d2;
+        border-left: 2px solid #D6E8FF;
+        border-right: 2px solid #D6E8FF;
+    }
+
+    .webgrid-selected-row {
+        font-weight: bold;
+    }
+</style>
+@{
+    //Html.RenderPartial("~/Views/Shared/Index.cshtml", Model);
+    var webgrid = new WebGrid(source: Model, defaultSort: "id");
 }
 
-@{
-    Html.RenderPartial("~/Views/Shared/Index.cshtml", Model);
-}
+@webgrid.GetHtml(
+    tableStyle: "webgrid",
+    headerStyle: "webgrid-header",
+    footerStyle: "webgrid-footer",
+    alternatingRowStyle: "webgrid-alternating-row",
+    selectedRowStyle: "webgrid-selected-row",
+    rowStyle: "webgrid-row-style")
 
 
