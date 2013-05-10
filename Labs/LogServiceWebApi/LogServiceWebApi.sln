@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogServiceWebApi", "LogServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log4netSqlite", "Log4netSqlite\Log4netSqlite.csproj", "{508D2869-FDA2-4230-A7FB-C64296744C26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogViewer", "LogViewer\LogViewer.csproj", "{32640DEC-7BA7-492E-B7AB-244367F4C285}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{508D2869-FDA2-4230-A7FB-C64296744C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{508D2869-FDA2-4230-A7FB-C64296744C26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{508D2869-FDA2-4230-A7FB-C64296744C26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32640DEC-7BA7-492E-B7AB-244367F4C285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32640DEC-7BA7-492E-B7AB-244367F4C285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32640DEC-7BA7-492E-B7AB-244367F4C285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32640DEC-7BA7-492E-B7AB-244367F4C285}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

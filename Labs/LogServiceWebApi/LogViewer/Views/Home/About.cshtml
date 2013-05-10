@@ -2,11 +2,11 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style type="text/css">
     .webgrid {
-        border: 0px;
+        width: 100%;
+        border: 2px;
         border-collapse: collapse;
     }
 
@@ -15,6 +15,7 @@
         }
 
     .webgrid-header {
+        text-align: center;
         padding: 6px 5px;
         text-align: center;
         background-color: #e8eef4;
@@ -54,37 +55,32 @@
     .webgrid-selected-row {
         font-weight: bold;
     }
+    th {
+        text-align: center; 
+    }
 </style>
 @{
     //Html.RenderPartial("~/Views/Shared/Index.cshtml", Model);
     var webgrid = new WebGrid(source: Model, defaultSort: "id");
 }
 <div>
- @webgrid.GetHtml(
-    columns:webgrid.Columns(
-        webgrid.Column("appdomain"),
-        webgrid.Column("file"),
-        webgrid.Column("date"),
-        webgrid.Column("message"),
-        webgrid.Column("aspnetcache"),
-        webgrid.Column("aspnetcontext")
-    ),
-    tableStyle: "webgrid",
-    headerStyle: "webgrid-header",
-    footerStyle: "webgrid-footer",
-    alternatingRowStyle: "webgrid-alternating-row",
-    selectedRowStyle: "webgrid-selected-row",
-    rowStyle: "webgrid-row-style")   
+    @webgrid.GetHtml(
+        columns: webgrid.Columns(
+            webgrid.Column("appdomain"),
+            webgrid.Column("file"),
+            webgrid.Column("date"),
+            webgrid.Column("message"),
+            webgrid.Column("aspnetcache"),
+            webgrid.Column("aspnetcontext")
+            ),
+        tableStyle: "webgrid",
+        headerStyle: "webgrid-header",
+        footerStyle: "webgrid-footer",
+        alternatingRowStyle: "webgrid-alternating-row",
+        selectedRowStyle: "webgrid-selected-row",
+        rowStyle: "webgrid-row-style")
+</div>
+<div>
+    <img src="@Url.Action("Chart")" alt="SimpleChart"/>
 </div>
 
-<div>
-   @* @{ 
-        var basicChart = new Chart(width: 600, height: 400)
-            .AddTitle("Chart Title")
-            .AddSeries(
-                name: "Employee",
-                xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
-                yValues: new[] { "2", "6", "4", "5", "3" })
-            .Write(); 
-    }*@
-</div>
