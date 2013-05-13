@@ -1,87 +1,83 @@
-﻿@model IEnumerable<dynamic>
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Index";
 }
 <style type="text/css">
-    .webgrid {
-        width: 100%;
-        border: 2px;
+    table {
+        font-family: verdana,arial,sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: #999999;
         border-collapse: collapse;
+        width: 27%;
     }
 
-        .webgrid a {
-            color: #000;
+        table th {
+            background: #b5cfd2;
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #999999;
         }
 
-    .webgrid-header {
+        table td {
+            background: #dcddc0;
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #999999;
+        }
+
+    .foot {
+        background: #dcddc0;
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #999999;
         text-align: center;
-        padding: 6px 5px;
-        text-align: center;
-        background-color: #e8eef4;
-        border-bottom: 2px solid #3966A2;
-        height: 40px;
-        border-top: 2px solid #D6E8FF;
-        border-left: 2px solid #D6E8FF;
-        border-right: 2px solid #D6E8FF;
+        width: 25%;
     }
 
-    .webgrid-footer {
-        padding: 6px 5px;
-        text-align: center;
-        background-color: #e8eef4;
-        border-top: 2px solid #3966A2;
-        height: 30px;
-        border-bottom: 2px solid #D6E8FF;
-        border-left: 2px solid #D6E8FF;
-        border-right: 2px solid #D6E8FF;
+    img {
+        vertical-align: text-top;
     }
 
-    .webgrid-alternating-row {
-        height: 30px;
-        background-color: #f2f2f2;
-        border-bottom: 1px solid #d2d2d2;
-        border-left: 2px solid #D6E8FF;
-        border-right: 2px solid #D6E8FF;
-    }
-
-    .webgrid-row-style {
-        height: 30px;
-        border-bottom: 1px solid #d2d2d2;
-        border-left: 2px solid #D6E8FF;
-        border-right: 2px solid #D6E8FF;
-    }
-
-    .webgrid-selected-row {
-        font-weight: bold;
-    }
-    th {
-        text-align: center; 
+    .columnWidth {
+        width: 500px;
     }
 </style>
 @{
     //Html.RenderPartial("~/Views/Shared/Index.cshtml", Model);
-    var webgrid = new WebGrid(source: Model, defaultSort: "id");
+    var webgrid = new WebGrid(defaultSort: "id", canPage: true, rowsPerPage: (dynamic)Model.PageSize, ajaxUpdateContainerId: "grid");
+    webgrid.Bind(Model.Products, autoSortAndPage: false, rowCount: Model.TotalRows);
+    webgrid.Pager(WebGridPagerModes.All);
 }
 <div>
     @webgrid.GetHtml(
-        //columns: webgrid.Columns(
-        //    webgrid.Column("appdomain"),
-        //    webgrid.Column("file"),
-        //    webgrid.Column("date"),
-        //    webgrid.Column("message"),
-        //    webgrid.Column("aspnetcache"),
-        //    webgrid.Column("aspnetcontext")
-        //    ),
-        //tableStyle: "webgrid",
-        //headerStyle: "webgrid-header",
-        //footerStyle: "webgrid-footer",
-        //alternatingRowStyle: "webgrid-alternating-row",
-        //selectedRowStyle: "webgrid-selected-row",
-        //rowStyle: "webgrid-row-style"
+            columns: webgrid.Columns(
+                webgrid.Column("appdomain", "应用程序"),
+                webgrid.Column("file", "文件"),
+                webgrid.Column("date", "日期"),
+                webgrid.Column("message", "日志"),
+                webgrid.Column("aspnetcache", "缓存", style: "columnWidth"),
+                webgrid.Column("aspnetcontext", "上下文", style: "columnWidth")
+                )
+            //tableStyle: "webgrid",
+            //headerStyle: "webgrid-header",
+            //footerStyle: "webgrid-footer",
+            //alternatingRowStyle: "webgrid-alternating-row",
+            //selectedRowStyle: "webgrid-selected-row",
+            //rowStyle: "webgrid-row-style"
         )
 </div>
-<div>
-    <img src="@Url.Action("Chart")" alt="SimpleChart"/>
+<div style="width: 1300px">
+    <div style="float: left">
+        <img src="@Url.Action("Chart")" alt="SimpleChart"/>
+    </div>
+    <div style="float: left">
+        <img src="@Url.Action("MyChart")" alt="kkko"/>
+    </div>
 </div>
 
