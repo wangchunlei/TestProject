@@ -1,36 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
+using BootstrapMvcSample.Controllers;
+using Models;
 
 namespace LogViewer.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BootstrapBaseController
     {
+        private static List<HomeInputModel> _models = ModelIntializer.CreateHomeInputModels();
         public ActionResult Index()
         {
-            ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
-
-            return View();
+           
+            var homeInputModels = _models;                                      
+            return View(homeInputModels);
         }
-
         public ActionResult About(int page = 1)
         {
             const int pageSize = 2;
             Log4netSqlite.Program.PersistentData();
             var data = Log4netSqlite.Program.Query("").ToList();
             var viewData = new
-                {
-                    PageSize = pageSize,
-                    PageNumber = page,
-                    Products = data.Skip((page - 1) * pageSize).Take(pageSize),
-                    TotalRows = data.Count
-                };
+            {
+                PageSize = pageSize,
+                PageNumber = page,
+                Products = data.Skip((page - 1) * pageSize).Take(pageSize),
+                TotalRows = data.Count
+            };
             return View(ToExpando(viewData));
         }
         public static ExpandoObject ToExpando(object anonymousObject)
@@ -41,37 +39,59 @@ namespace LogViewer.Controllers
                 expando.Add(item);
             return (ExpandoObject)expando;
         }
-        public ActionResult Contact()
+        [HttpPost]
+        public ActionResult Create(HomeInputModel model)
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            if (ModelState.IsValid)
+            {
+                model.Id = _models.Count==0?1:_models.Select(x => x.Id).Max() + 1;
+                _models.Add(model);
+                Success("Your information was saved!");
+                return RedirectToAction("Index");
+            }
+            Error("there were some errors in your form.");
+            return View(model);
         }
 
-        public ActionResult Chart()
+        public ActionResult Create()
         {
-            var basicChart = new Chart(width: 440, height: 400)
-                .AddTitle("Chart Title")
-                .AddSeries(
-                    name: "Employee",
-                    xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
-                    yValues: new[] { "2", "6", "4", "5", "3" }).GetBytes("png");
-            return File(basicChart, "image/png");
+            return View(new HomeInputModel());
         }
 
-        public ActionResult MyChart()
+        public ActionResult Delete(int id)
         {
-            var dataSet = new DataSet();
-            dataSet.ReadXmlSchema(Server.MapPath("~/App_Data/data.xsd"));
-            dataSet.ReadXml(Server.MapPath("~/App_Data/data.xml"));
-            var dataView = new DataView(dataSet.Tables[0]);
-
-            var myChart = new Chart(width: 440, height: 400)
-                .AddTitle("Sales Per Employee")
-                .AddSeries("Default", chartType: "Pie",
-                    xValue: dataView, xField: "Name",
-                    yValues: dataView, yFields: "Sales").GetBytes("png");
-            return File(myChart, "image/png");
+            _models.Remove(_models.Get(id));
+            Information("Your widget was deleted");
+            if(_models.Count==0)
+            {
+                Attention("You have deleted all the models! Create a new one to continue the demo.");
+            }
+            return RedirectToAction("index");
         }
+        public ActionResult Edit(int id)
+        {
+            var model = _models.Get(id);
+            return View("Create", model);
+        }
+        [HttpPost]        
+        public ActionResult Edit(HomeInputModel model,int id)
+        {
+            if(ModelState.IsValid)
+            {
+                _models.Remove(_models.Get(id));
+                model.Id = id;
+                _models.Add(model);
+                Success("The model was updated!");
+                return RedirectToAction("index");
+            }
+            return View("Create", model);
+        }
+
+		public ActionResult Details(int id)
+        {
+            var model = _models.Get(id);
+            return View(model);
+        }
+
     }
 }
