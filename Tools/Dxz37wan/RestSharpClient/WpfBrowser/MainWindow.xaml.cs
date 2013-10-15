@@ -66,7 +66,14 @@ namespace WpfBrowser
                 }
                 catch (Exception)
                 {
-
+                    System.Threading.Tasks.Task.Factory.StartNew(() =>
+                    {
+                        System.Threading.Thread.Sleep(TimeSpan.FromSeconds(20));
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            this.Close();
+                        });
+                    });
                 }
             };
             var timer = new System.Timers.Timer(TimeSpan.FromMinutes(Convert.ToInt32(this.check.Text)).TotalMilliseconds);
