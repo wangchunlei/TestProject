@@ -26,7 +26,10 @@ namespace WpfBrowser
             InitializeComponent();
             this.Loaded += (s, e) =>
             {
-                Button_Click(s, e);
+                if (DateTime.Now.Hour < 21 || DateTime.Now.Hour >= 23)
+                {
+                    Button_Click(s, e);
+                }
             };
         }
 
