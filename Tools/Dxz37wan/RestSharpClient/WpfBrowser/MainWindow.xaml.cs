@@ -32,6 +32,10 @@ namespace WpfBrowser
                 {
                     Button_Click(s, e);
                 }
+                else
+                {
+                    this.Close();
+                }
             };
             this.webBrowser.Navigated += webBrowser_Navigated;
         }
