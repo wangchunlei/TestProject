@@ -39,12 +39,29 @@ namespace DNSTest
         }
         private static StringBuilder LookupHost(string[] hostNameOrAddresses)
         {
+
             var stringBuilder = new StringBuilder();
             var Options = new JHSoftware.DnsClient.RequestOptions();
-            Options.DnsServers = new System.Net.IPAddress[] { 
-                               System.Net.IPAddress.Parse("8.8.8.8"), 
-                               //System.Net.IPAddress.Parse("8.8.4.4") 
-                            };
+            var servers = new string[] { "ns1.google.com", "ns2.google.com", "ns3.google.com", "ns4.google.com" };
+            var serverList = new List<string>()
+            {
+                "8.8.8.8","8.8.4.4"
+            };
+
+            //
+            foreach (var s in servers)
+            {
+                foreach (var ipaddress in System.Net.Dns.GetHostAddresses(s))
+                {
+                    serverList.Add(ipaddress.ToString());
+                }
+            }
+            //Options.DnsServers = new System.Net.IPAddress[] { 
+            //                   System.Net.IPAddress.Parse("8.8.8.8"), 
+            //                   System.Net.IPAddress.Parse("8.8.4.4"),
+            //                   //System.Net.IPAddress.Parse("216.239.32.10")
+            //                };
+            Options.DnsServers = serverList.Select(si => System.Net.IPAddress.Parse(si)).ToArray();
             foreach (var hostNameOrAddress in hostNameOrAddresses)
             {
                 var IPs = JHSoftware.DnsClient.LookupHost(hostNameOrAddress,
