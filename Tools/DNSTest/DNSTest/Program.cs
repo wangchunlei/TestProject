@@ -21,7 +21,7 @@ namespace DNSTest
         static void Main()
         {
             // Do a few lookups by host name and address  
-            var ips = DNSLookup(new string[] { "g.cn", "google.com.hk" });
+            var ips = LookupHost(new string[] { "g.cn", "google.com.hk" });
             Console.WriteLine(ips);
             Copy(ips.ToString());
             // Keep the console window open in debug mode  
@@ -36,6 +36,37 @@ namespace DNSTest
             SetClipboardData(13, ptr);
             CloseClipboard();
             Marshal.FreeHGlobal(ptr);
+        }
+        private static StringBuilder LookupHost(string[] hostNameOrAddresses)
+        {
+            var stringBuilder = new StringBuilder();
+            var Options = new JHSoftware.DnsClient.RequestOptions();
+            Options.DnsServers = new System.Net.IPAddress[] { 
+                               System.Net.IPAddress.Parse("8.8.8.8"), 
+                               //System.Net.IPAddress.Parse("8.8.4.4") 
+                            };
+            foreach (var hostNameOrAddress in hostNameOrAddresses)
+            {
+                var IPs = JHSoftware.DnsClient.LookupHost(hostNameOrAddress,
+                                                          JHSoftware.DnsClient.IPVersion.IPv4,
+                                                          Options);
+                if (hostNameOrAddress.Equals("g.cn"))
+                {
+                    var ipcn = "google_cn = " + string.Join("|", IPs.Select(i => i.ToString()));
+                    stringBuilder.AppendLine(ipcn);
+                }
+                else if (hostNameOrAddress.Equals("google.com.hk"))
+                {
+                    var iphk = "google_hk = " + string.Join("|", IPs.Select(i => i.ToString()));
+                    stringBuilder.AppendLine(iphk);
+                }
+
+                foreach (var IP in IPs)
+                {
+                    Console.WriteLine(IP.ToString());
+                }
+            }
+            return stringBuilder;
         }
         protected static StringBuilder DNSLookup(string[] hostNameOrAddresses)
         {
