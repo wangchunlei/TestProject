@@ -61,10 +61,10 @@ namespace DNSTest
                     stringBuilder.AppendLine(iphk);
                 }
 
-                foreach (var IP in IPs)
-                {
-                    Console.WriteLine(IP.ToString());
-                }
+                //foreach (var IP in IPs)
+                //{
+                //   // Console.WriteLine(IP.ToString());
+                //}
             }
             return stringBuilder;
         }
