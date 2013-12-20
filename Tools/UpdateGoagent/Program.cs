@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -49,7 +50,16 @@ namespace UpdateGoagent
             {
                 DeleteCache(Path.Combine(targetPath, "goagent"));
                 Console.WriteLine("开始解压到{0}", targetPath);
-
+                var process = Process.GetProcessesByName("python27").FirstOrDefault();
+                if (process != null)
+                {
+                    process.Kill();
+                    process = Process.GetProcessesByName("goagent").FirstOrDefault();
+                    if (process != null)
+                    {
+                        process.Kill();
+                    }
+                }
                 using (var zip = ZipFile.Read(memory))
                 {
                     var zips = zip.Entries.ToList();
