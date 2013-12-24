@@ -20,6 +20,11 @@ namespace UpdateGoagent
             //var request = new RestRequest(Method.GET);
 
             //var data = client.DownloadData(request);
+            var url = "https://nodeload.github.com/goagent/goagent/legacy.zip/3.0";
+            if (args != null && args.Length > 0)
+            {
+                url = args[0];
+            }
             byte[] bytes = null;
             DateTime start = DateTime.Now;
             using (var webClient = new WebClient())
@@ -37,7 +42,7 @@ namespace UpdateGoagent
 
                     Console.Write("\r{0}%-----{1}/{2} ==({3}kb/s)  ", e.ProgressPercentage, e.BytesReceived, e.TotalBytesToReceive, percent.ToString("0.00"));
                 };
-                var uri = new Uri("https://nodeload.github.com/goagent/goagent/legacy.zip/3.0");
+                var uri = new Uri(url);
                 start = DateTime.Now;
                 var task = webClient.DownloadDataTaskAsync(uri);
                 task.Wait();
