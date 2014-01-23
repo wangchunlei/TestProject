@@ -9,12 +9,12 @@ namespace HttpProxy
     {
         static void Main(string[] args)
         {
-            var port = args[0];
+            //var port = args[0];
             int portNo = 8099;
-            if (!string.IsNullOrEmpty(port))
-            {
-                portNo = int.Parse(port);
-            }
+            //if (!string.IsNullOrEmpty(port))
+            //{
+            //    portNo = int.Parse(port);
+            //}
             var proxy = HttpListenerProxy.Create(portNo);
             proxy.Start();
             Console.ReadKey(false);
