@@ -12,10 +12,17 @@ namespace AutoLoginTest
     {
         static void Main(string[] args)
         {
+            var cm = new VistaPrompt();
+            //cm.Domain = "lanxum";
+            cm.SaveChecked = true;
+            cm.ShowSaveCheckBox = true;
+            DialogResult rs = cm.ShowDialog();
+            
             //CredentialManagement();
             var httpClient = new HttpClient(new HttpClientHandler()
             {
-                UseDefaultCredentials = true
+                //UseDefaultCredentials = true
+                Credentials=new System.Net.NetworkCredential(cm.Username,cm.SecurePassword)
             });
             httpClient.GetStringAsync("http://192.168.20.30:8078").ContinueWith(t =>
             {
