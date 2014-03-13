@@ -13,6 +13,7 @@ namespace AutoLoginTest
     {
         static void Main(string[] args)
         {
+            GetCredential("192.168.20.30");
             //using (PrincipalContext context = new PrincipalContext(ContextType.Machine, "192.168.20.30",null,ContextOptions.Negotiate))
             //{
             //    //if (!currentUser.ToLower().StartsWith("lanxum\\"))
@@ -32,41 +33,41 @@ namespace AutoLoginTest
             //    }
             //}
 
-            var cm = new VistaPrompt();
-            //cm.Domain = "lanxum";
-            cm.SaveChecked = true;
-            cm.ShowSaveCheckBox = true;
-            cm.Title = @"指定已授权的 域(计算机)\用户";
-            cm.Message = "123213";
-            DialogResult rs = cm.ShowDialog();
-            
-            //CredentialManagement();
-            var httpClient = new HttpClient(new HttpClientHandler()
-            {
-                //UseDefaultCredentials = true
-                Credentials=new System.Net.NetworkCredential(cm.Username,cm.SecurePassword)
-            });
-            httpClient.GetStringAsync("http://192.168.20.30:8078").ContinueWith(t =>
-            {
-                if (t.IsFaulted)
-                {
-                    Console.WriteLine(t.Exception.GetBaseException());
-                }
-                else
-                {
-                    Console.WriteLine(t.Result);
-                }
-            });
+            //var cm = new VistaPrompt();
+            ////cm.Domain = "lanxum";
+            //cm.SaveChecked = true;
+            //cm.ShowSaveCheckBox = true;
+            //cm.Title = @"指定已授权的 域(计算机)\用户";
+            //cm.Message = "123213";
+            //DialogResult rs = cm.ShowDialog();
 
-            var c = new Credential()
-            {
-                Target = "192.168.20.30",
-                Type = CredentialType.DomainPassword,//windows 凭证 Generic 普通凭证
-                PersistanceType = PersistanceType.Enterprise,//永久
-                Username = "zhangzhongsheng@lanxum.com",
-                SecurePassword = cm.SecurePassword,
-            };
-            c.Save();
+            ////CredentialManagement();
+            //var httpClient = new HttpClient(new HttpClientHandler()
+            //{
+            //    //UseDefaultCredentials = true
+            //    Credentials = new System.Net.NetworkCredential(cm.Username, cm.SecurePassword)
+            //});
+            //httpClient.GetStringAsync("http://192.168.20.30:8078").ContinueWith(t =>
+            //{
+            //    if (t.IsFaulted)
+            //    {
+            //        Console.WriteLine(t.Exception.GetBaseException());
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine(t.Result);
+            //    }
+            //});
+
+            //var c = new Credential()
+            //{
+            //    Target = "192.168.20.30",
+            //    Type = CredentialType.DomainPassword,//windows 凭证 Generic 普通凭证
+            //    PersistanceType = PersistanceType.Enterprise,//永久
+            //    Username = "zhangzhongsheng@lanxum.com",
+            //    SecurePassword = cm.SecurePassword,
+            //};
+            //c.Save();
 
             Console.ReadKey();
         }
@@ -106,32 +107,42 @@ namespace AutoLoginTest
             if (IsWinVistaOrHigher())
             {
                 prompt = new VistaPrompt();
+                Console.WriteLine("win7");
             }
             else
             {
-                prompt = new XPPrompt();
+                prompt = new XPPrompt() { Target = serverip };
+
+                Console.WriteLine("xp");
             }
             prompt.SaveChecked = true;
             prompt.ShowSaveCheckBox = true;
             prompt.Title = @"指定已授权的 域(计算机)\用户";
-
-            if (prompt.ShowDialog() == DialogResult.OK)
+            try
             {
-                credentials = new System.Net.NetworkCredential(prompt.Username, prompt.SecurePassword);
-                if (prompt.SaveChecked)
+                if (prompt.ShowDialog() == DialogResult.OK)
                 {
-                    var cm = new Credential()
+                    credentials = new System.Net.NetworkCredential(prompt.Username, prompt.SecurePassword);
+                    if (prompt.SaveChecked)
                     {
-                        Target = serverip,
-                        Type = CredentialType.DomainPassword,//windows 凭证 Generic 普通凭证
-                        PersistanceType = PersistanceType.Enterprise,//永久
-                        Username = prompt.Username,
-                        SecurePassword = prompt.SecurePassword
-                    };
-                    cm.Save();
+                        var cm = new Credential()
+                        {
+                            Target = serverip,
+                            Type = CredentialType.DomainPassword,//windows 凭证 Generic 普通凭证
+                            PersistanceType = PersistanceType.Enterprise,//永久
+                            Username = prompt.Username,
+                            SecurePassword = prompt.SecurePassword
+                        };
+                        cm.Save();
+                    }
+                    return credentials;
                 }
-                return credentials;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.GetBaseException());
+            }
+
             return null;
         }
         private static bool IsWinVistaOrHigher()
