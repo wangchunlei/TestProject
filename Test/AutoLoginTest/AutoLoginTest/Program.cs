@@ -13,7 +13,20 @@ namespace AutoLoginTest
     {
         static void Main(string[] args)
         {
-            GetCredential("192.168.20.30");
+            var c = new Credential()
+            {
+                Target = "192.168.20.195",
+                Type = CredentialType.DomainPassword,//windows 凭证 Generic 普通凭证
+                PersistanceType = PersistanceType.Enterprise,//永久
+                
+            };
+            if (c.Exists())
+            {
+                c.Load();
+                Console.WriteLine(c.Username);
+            }
+
+            //GetCredential("192.168.20.30");
             //using (PrincipalContext context = new PrincipalContext(ContextType.Machine, "192.168.20.30",null,ContextOptions.Negotiate))
             //{
             //    //if (!currentUser.ToLower().StartsWith("lanxum\\"))
@@ -42,22 +55,23 @@ namespace AutoLoginTest
             //DialogResult rs = cm.ShowDialog();
 
             ////CredentialManagement();
-            //var httpClient = new HttpClient(new HttpClientHandler()
-            //{
-            //    //UseDefaultCredentials = true
-            //    Credentials = new System.Net.NetworkCredential(cm.Username, cm.SecurePassword)
-            //});
-            //httpClient.GetStringAsync("http://192.168.20.30:8078").ContinueWith(t =>
-            //{
-            //    if (t.IsFaulted)
-            //    {
-            //        Console.WriteLine(t.Exception.GetBaseException());
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine(t.Result);
-            //    }
-            //});
+            var us = c.Username.Split('\\');
+            var httpClient = new HttpClient(new HttpClientHandler()
+            {
+                //UseDefaultCredentials = true
+                Credentials = new System.Net.NetworkCredential(@"transfer218", "Lanxum1234", "WIN-6U432IIN")
+            });
+            httpClient.GetStringAsync("http://192.168.20.195:8090").ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    Console.WriteLine(t.Exception.GetBaseException());
+                }
+                else
+                {
+                    Console.WriteLine(t.Result);
+                }
+            });
 
             //var c = new Credential()
             //{
