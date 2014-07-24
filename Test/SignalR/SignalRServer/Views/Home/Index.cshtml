@@ -1,0 +1,19 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script>
+    $(function () {
+        var hub = $.connection.echo;
+        $.connection.hub
+            .start()
+            .done(function () {
+                hub.server.say('Hello SignalR!');
+            });
+    });
+</script>
+<h2>Index</h2>
+
