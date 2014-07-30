@@ -2,18 +2,38 @@
     Layout = null;
     ViewBag.Title = "Index";
 }
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
-<script src="~/signalr/hubs"></script>
-<script>
-    $(function () {
-        var hub = $.connection.echo;
-        $.connection.hub
-            .start()
-            .done(function () {
-                hub.server.say('Hello SignalR!');
-            });
-    });
-</script>
-<h2>Index</h2>
-
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Chat Room</title>
+    <link href="~/Content/chat.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
+    <script src="http://localhost:1980/signalr/hubs"></script>
+    <script src="~/Scripts/App.js"></script>
+</head>
+<body>
+    <div id="actions">
+        <div id="login-box">
+            <span>Name:</span>
+            <input type="text" id="name" />
+            <button id="login">Login</button>
+        </div>
+        <div id="logout-box">
+            <span id="logged"></span>
+            <button id="logout">Logout</button>
+        </div>
+    </div>
+    <div id="rooms-box">
+        <div>
+            <span>New room:</span>
+            <input type="text" id="room" />
+            <button id="new">New</button>
+        </div>
+        <ul id="rooms"></ul>
+    </div>
+    <div id="chats-box">
+        <ul id="chats"></ul>
+    </div>
+</body>
+</html>

@@ -14,5 +14,15 @@ namespace SignalRServer.Controllers
         {
             return View();
         }
+
+        public ActionResult Whiteboard()
+        {
+            return View();
+        }
+
+        public ActionResult Flights()
+        {
+            return View();
+        }
 	}
 }

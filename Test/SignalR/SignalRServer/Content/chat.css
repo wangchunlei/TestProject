@@ -1,0 +1,93 @@
+﻿body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+button {
+    width: 80px;
+}
+
+span {
+    width: 100px;
+    display: inline-block;
+}
+
+#actions {
+    position: fixed;
+    height: 40px;
+    left: 0;
+    right: 0;
+    background-color: lightyellow;
+}
+
+#login-box {
+    float: left;
+}
+
+#logout-box {
+    float: right;
+    display: none;
+}
+
+#rooms-box {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    width: 400px;
+    bottom: 0;
+    background-color: lightgreen;
+    display: none;
+}
+
+#rooms li {
+    cursor: pointer;
+}
+
+#chats-box {
+    position: fixed;
+    overflow-y: scroll;
+    top: 40px;
+    left: 400px;
+    right: 0;
+    bottom: 0;
+    background-color: lightpink;
+    display: none;
+}
+
+    #chats-box ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    #chats-box > ul > li {
+        list-style-type: none;
+        height: 200px;
+        width: 100%;
+        border: 1px solid black;
+    }
+
+#chats h4 {
+    height: 25px;
+    margin: 0;
+}
+
+div.input {
+    height: 25px;
+    width: 100%;
+}
+
+    div.input input {
+        left: 0;
+        width: 580px;
+    }
+
+div.messages-box {
+    top: 80px;
+    left: 0;
+    right: 0;
+    height: 150px;
+    overflow-y: scroll;
+}
+
+span.sender {
+    font-weight: bold;
+}

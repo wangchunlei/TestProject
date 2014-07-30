@@ -1,0 +1,24 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Whiteboard</title>
+    <link href="~/Content/whiteboard.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
+    <script src="http://localhost:1980/signalr/hubs"></script>
+    <script src="~/Scripts/whiteboard.js"></script>
+</head>
+<body>
+    Name: <input type="text" id="name" />
+    <button id="join">Join</button>
+    <span id="logged"></span>
+    <canvas id="surface" width="800" height="600"
+            style="z-index: 0"></canvas>
+    <canvas id="temp" width="800" height="600"
+            style="z-index: 1;
+background-color: transparent"></canvas>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Flight</title>
+    <link href="~/Content/flight.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&sensor=false"></script>
+    <script src="http://localhost:1980/signalr/hubs"></script>
+    <script src="~/Scripts/flight.js"></script>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="messages">
+        <button id="start" style="display: none">
+            Start
+        </button>
+        <ul></ul>
+    </div>
+</body>
+</html>
