@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace SignalRSelfHost.Hubs
 {
     [HubName("echo")]
-    public class EchoHub:Hub
+    public class EchoHub : Hub
     {
         public void Say(string message)
         {
-            Trace.WriteLine(message);
+            Console.WriteLine(message);
         }
     }
 }

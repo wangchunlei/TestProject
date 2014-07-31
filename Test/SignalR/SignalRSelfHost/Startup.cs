@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -11,10 +12,16 @@ using SignalRSelfHost.Modules;
 
 namespace SignalRSelfHost
 {
+    using AppFunc = Func<IDictionary<string, object>, Task>;
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
+            app.Use(new Func<AppFunc, AppFunc>(next =>
+                  (async env =>
+                  {
+                      await next.Invoke(env);
+                  })));
             app.Map("/signalr", map =>
             {
                 map.UseCors(CorsOptions.AllowAll);

@@ -1,25 +1,23 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SignalRConsoleClient
 {
-    class Program
+    internal class Program
     {
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-        private extern static IntPtr LoadLibrary(string librayName);
-        static void Main(string[] args)
+        private static extern IntPtr LoadLibrary(string librayName);
+
+        private static void Main(string[] args)
         {
             var obj = new
             {
@@ -37,7 +35,11 @@ namespace SignalRConsoleClient
                     Console.WriteLine(data);
                 }
             }
-            using (var ms = new MemoryStream(Convert.FromBase64String("MQAAAAMwACkAAAACTmFtZQAHAAAARWFzdGVyAAlTdGFydERhdGUAgDf0uj0BAAAAAA==")))
+            using (
+                var ms =
+                    new MemoryStream(
+                        Convert.FromBase64String("MQAAAAMwACkAAAACTmFtZQAHAAAARWFzdGVyAAlTdGFydERhdGUAgDf0uj0BAAAAAA=="))
+                )
             {
                 using (var reader = new BsonReader(ms))
                 {
@@ -45,17 +47,18 @@ namespace SignalRConsoleClient
                     var serializer = new JsonSerializer();
 
                     var e = serializer.Deserialize<IList<dynamic>>(reader);
-
                 }
             }
             Do().ContinueWith(_ =>
             {
-                var hub = (_ as Task<IHubProxy>).Result;
-
-                hub.Invoke("Say", "Hello , SignalR!").ContinueWith(t =>
+                IHubProxy hub = (_ as Task<IHubProxy>).Result;
+                for (int i = 0; i < 10000; i++)
                 {
-                    Console.WriteLine("Invoke Server side method;");
-                });
+                    var @var = i;
+                    hub.Invoke("Say", @var.ToString())
+                        .ContinueWith(t => { Console.WriteLine(@var); });
+                }
+
 
                 Console.WriteLine("Init completed!");
             });
@@ -64,19 +67,20 @@ namespace SignalRConsoleClient
 
         private static Task Do()
         {
-            var url = "http://localhost:1980";
+            string url = "http://localhost:1980";
             var connection = new HubConnection(url);
-            var hub = connection.CreateHubProxy("echo");
+            IHubProxy hub = connection.CreateHubProxy("echo");
             var httpClient = new DefaultHttpClient();
             var transport = new AutoTransport(
-                    httpClient,
-                    new IClientTransport[]
-                    {
-                        new ServerSentEventsTransport(httpClient),
-                        new LongPollingTransport(httpClient)
-                    }
-                 );
-            connection.Error += (error) => ConsoleColor.Red.AsColorFor(() => Console.WriteLine("Error from connection: {0}", error));
+                httpClient,
+                new IClientTransport[]
+                {
+                    new ServerSentEventsTransport(httpClient),
+                    new LongPollingTransport(httpClient)
+                }
+                );
+            //connection.Error +=
+            //    error => ConsoleColor.Red.AsColorFor(() => Console.WriteLine("Error from connection: {0}", error));
             connection.Closed += () =>
             {
                 Console.WriteLine("Closed");
@@ -86,15 +90,16 @@ namespace SignalRConsoleClient
                 //}
                 if (!connection.EnsureReconnecting())
                 {
-                    Task.Factory.StartNew(() => Thread.Sleep(TimeSpan.FromSeconds(30))).ContinueWith(t => connection.Start().Wait());
+                    Task.Factory.StartNew(() => Thread.Sleep(TimeSpan.FromSeconds(30)))
+                        .ContinueWith(t => connection.Start().Wait());
                 }
             };
             connection.ConnectionSlow += () => Console.WriteLine("ConnectionSolw!");
-            connection.Received += (data) => Console.WriteLine(string.Format("Received:{0}", data));
+            connection.Received += data => Console.WriteLine(string.Format("Received:{0}", data));
             connection.Reconnected += () => Console.WriteLine("Reconnected!");
             connection.StateChanged +=
-                (state) =>
-                    Console.WriteLine(string.Format("StateChanged:From {0} to {1}", state.OldState, state.NewState));
+                state =>
+                    Console.WriteLine("StateChanged:From {0} to {1}", state.OldState, state.NewState);
             return connection.Start(transport).ContinueWith(_ =>
             {
                 Console.WriteLine("Connected, transport is :{0}", connection.Transport.Name);
