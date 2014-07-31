@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.SignalR.Client;
+﻿using System.Threading;
+using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using Newtonsoft.Json;
@@ -75,13 +76,25 @@ namespace SignalRConsoleClient
                         new LongPollingTransport(httpClient)
                     }
                  );
-            connection.Error += (error) =>
+            connection.Error += (error) => ConsoleColor.Red.AsColorFor(() => Console.WriteLine("Error from connection: {0}", error));
+            connection.Closed += () =>
             {
-                ConsoleColor.Red.AsColorFor(() =>
+                Console.WriteLine("Closed");
+                //if (!connection.EnsureReconnecting())
+                //{
+                //    Task.Delay(TimeSpan.FromSeconds(30)).ContinueWith(t => connection.Start().Wait());
+                //}
+                if (!connection.EnsureReconnecting())
                 {
-                    Console.WriteLine("Error from connection: {0}", error);
-                });
+                    Task.Factory.StartNew(() => Thread.Sleep(TimeSpan.FromSeconds(30))).ContinueWith(t => connection.Start().Wait());
+                }
             };
+            connection.ConnectionSlow += () => Console.WriteLine("ConnectionSolw!");
+            connection.Received += (data) => Console.WriteLine(string.Format("Received:{0}", data));
+            connection.Reconnected += () => Console.WriteLine("Reconnected!");
+            connection.StateChanged +=
+                (state) =>
+                    Console.WriteLine(string.Format("StateChanged:From {0} to {1}", state.OldState, state.NewState));
             return connection.Start(transport).ContinueWith(_ =>
             {
                 Console.WriteLine("Connected, transport is :{0}", connection.Transport.Name);
