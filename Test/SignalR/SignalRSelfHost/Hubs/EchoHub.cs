@@ -16,5 +16,15 @@ namespace SignalRSelfHost.Hubs
         {
             Console.WriteLine(message);
         }
+
+        public override Task OnDisconnected()
+        {
+            return base.OnDisconnected();
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            return base.OnDisconnected(stopCalled);
+        }
     }
 }
