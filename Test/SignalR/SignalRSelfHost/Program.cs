@@ -11,9 +11,10 @@ namespace SignalRSelfHost
     {
         static void Main(string[] args)
         {
-            using (WebApp.Start<Startup>("http://localhost:1980"))
+            string url = "http://192.168.70.118:1980";
+            using (WebApp.Start<Startup>(url))
             {
-                Console.WriteLine("Server running!");
+                Console.WriteLine("Server running at :" + url);
                 Console.ReadLine();
             }
         }

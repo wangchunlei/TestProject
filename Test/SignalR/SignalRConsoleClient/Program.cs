@@ -19,40 +19,40 @@ namespace SignalRConsoleClient
 
         private static void Main(string[] args)
         {
-            var obj = new
-            {
-                name = "wangcl",
-                code = "wcl"
-            };
-            string data = string.Empty;
-            using (var mem = new MemoryStream())
-            {
-                using (var writer = new BsonWriter(mem))
-                {
-                    var serializer = new JsonSerializer();
-                    serializer.Serialize(writer, obj);
-                    data = Convert.ToBase64String(mem.ToArray());
-                    Console.WriteLine(data);
-                }
-            }
-            using (
-                var ms =
-                    new MemoryStream(
-                        Convert.FromBase64String("MQAAAAMwACkAAAACTmFtZQAHAAAARWFzdGVyAAlTdGFydERhdGUAgDf0uj0BAAAAAA=="))
-                )
-            {
-                using (var reader = new BsonReader(ms))
-                {
-                    reader.ReadRootValueAsArray = true;
-                    var serializer = new JsonSerializer();
+            //var obj = new
+            //{
+            //    name = "wangcl",
+            //    code = "wcl"
+            //};
+            //string data = string.Empty;
+            //using (var mem = new MemoryStream())
+            //{
+            //    using (var writer = new BsonWriter(mem))
+            //    {
+            //        var serializer = new JsonSerializer();
+            //        serializer.Serialize(writer, obj);
+            //        data = Convert.ToBase64String(mem.ToArray());
+            //        Console.WriteLine(data);
+            //    }
+            //}
+            //using (
+            //    var ms =
+            //        new MemoryStream(
+            //            Convert.FromBase64String("MQAAAAMwACkAAAACTmFtZQAHAAAARWFzdGVyAAlTdGFydERhdGUAgDf0uj0BAAAAAA=="))
+            //    )
+            //{
+            //    using (var reader = new BsonReader(ms))
+            //    {
+            //        reader.ReadRootValueAsArray = true;
+            //        var serializer = new JsonSerializer();
 
-                    var e = serializer.Deserialize<IList<dynamic>>(reader);
-                }
-            }
+            //        var e = serializer.Deserialize<IList<dynamic>>(reader);
+            //    }
+            //}
             Do().ContinueWith(_ =>
             {
                 IHubProxy hub = (_ as Task<IHubProxy>).Result;
-                for (int i = 0; i < 10000; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     var @var = i;
                     hub.Invoke("Say", @var.ToString())
@@ -67,7 +67,7 @@ namespace SignalRConsoleClient
 
         private static Task Do()
         {
-            string url = "http://localhost:1980";
+            string url = "http://192.168.70.118:1980";
             var connection = new HubConnection(url);
             IHubProxy hub = connection.CreateHubProxy("echo");
             var httpClient = new DefaultHttpClient();
@@ -75,7 +75,7 @@ namespace SignalRConsoleClient
                 httpClient,
                 new IClientTransport[]
                 {
-                    new ServerSentEventsTransport(httpClient),
+                    //new ServerSentEventsTransport(httpClient),
                     new LongPollingTransport(httpClient)
                 }
                 );
