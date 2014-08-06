@@ -29,7 +29,7 @@ namespace UpdateGoagent
             DateTime start = DateTime.Now;
             using (var webClient = new WebClient())
             {
-                var webproxy = new WebProxy();
+                //var webproxy = new WebProxy();
 
                 webClient.DownloadFileCompleted += (sender, e) =>
                 {
