@@ -57,6 +57,7 @@ namespace HttpProxy
                         var request = WebRequest.Create(requestString) as HttpWebRequest;
                         request.AllowAutoRedirect = false;
                         request.KeepAlive = context.Request.KeepAlive;
+                        request.Proxy = new WebProxy();
                         request.Proxy.Credentials = CredentialCache.DefaultCredentials;
                         request.Method = context.Request.HttpMethod;
                         request.ContentType = context.Request.ContentType;
@@ -113,7 +114,11 @@ namespace HttpProxy
                 HttpWebResponse resp = req.EndGetResponse(ar) as HttpWebResponse;
 
                 //rs.Context.Response.Headers = resp.Headers;
-                rs.Context.Response.ContentLength64 = resp.ContentLength;
+                if (resp.ContentLength > 0)
+                {
+                    rs.Context.Response.ContentLength64 = resp.ContentLength;
+                }
+
                 rs.Context.Response.ContentType = resp.ContentType;
                 //rs.Context.Response.Headers[HttpResponseHeader.SetCookie] = resp.Headers[HttpResponseHeader.SetCookie];
 

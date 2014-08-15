@@ -42,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpListenerProxy.cs" />
+    <Compile Include="HttpProcessor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TcpListenerProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
