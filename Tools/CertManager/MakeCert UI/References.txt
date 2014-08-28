@@ -1,0 +1,6 @@
+﻿http://stackoverflow.com/questions/10708473/can-i-create-a-self-signed-ssl-certificate-for-windows-azure-using-only-makecert
+http://iasknoone.blogspot.com/2008/03/summary-of-x509-certificate-file-types.html
+http://msdn.microsoft.com/en-us/library/windows/hardware/ff550672(v=vs.85).aspx
+http://blogs.technet.com/b/jhoward/archive/2005/02/02/365323.aspx
+http://www.digitallycreated.net/Blog/38/using-makecert-to-create-certificates-for-development
+http://www.codeproject.com/Articles/36705/7-simple-steps-to-enable-HTTPS-on-WCF-WsHttp-bindi
