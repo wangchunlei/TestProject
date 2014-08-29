@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceDemo", "WindowsServiceDemo\WindowsServiceDemo.csproj", "{31D9EF05-C032-49DD-8027-C2B5D6C47936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterceptKeys", "InterceptKeys\InterceptKeys.csproj", "{3046F4E6-FAB2-4F28-82ED-28EC3F2FDC92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31D9EF05-C032-49DD-8027-C2B5D6C47936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D9EF05-C032-49DD-8027-C2B5D6C47936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D9EF05-C032-49DD-8027-C2B5D6C47936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D9EF05-C032-49DD-8027-C2B5D6C47936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3046F4E6-FAB2-4F28-82ED-28EC3F2FDC92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3046F4E6-FAB2-4F28-82ED-28EC3F2FDC92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3046F4E6-FAB2-4F28-82ED-28EC3F2FDC92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3046F4E6-FAB2-4F28-82ED-28EC3F2FDC92}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
