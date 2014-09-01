@@ -8,12 +8,17 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using Domas.DAP.ADF.AutoUpdate;
+using System.Windows.Forms;
+using Domas.DAP.ADF.LogManager;
 
 namespace WindowsServiceDemo
 {
     public partial class Service1 : ServiceBase
     {
+        private ILogger logger = LogManager.GetLogger("KeyDemo");
+        //private KeyboardHookListener m_KeyboardHookManager;
+        //private Desktop m_Desktop = new Desktop();
+
         public Service1()
         {
             InitializeComponent();
@@ -27,20 +32,14 @@ namespace WindowsServiceDemo
         {
             Task.Factory.StartNew(() =>
             {
-                var uiExeFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "InterceptKeys.exe");
-                Interop.CreateProcess(uiExeFileName);
+                Process.Start(@"InterceptKeys.exe");
+                //Win32DLL.StartProcessAndBypassUAC(@"F:\Github\TestProject\Test\WindowsServiceDemo\WindowsServiceDemo\bin\Debug\InterceptKeys.exe");
             });
         }
 
         protected override void OnStop()
         {
-            var uiExeFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "InterceptKeys.exe");
-           var process= Process.GetProcessesByName("InterceptKeys").FirstOrDefault();
-            if (process!=null)
-            {
-                process.Kill();
-                process.WaitForExit((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
-            }
+            //m_Desktop.EndInteraction();
         }
     }
 }

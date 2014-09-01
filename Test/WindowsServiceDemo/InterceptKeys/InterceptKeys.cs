@@ -17,12 +17,12 @@ namespace InterceptKeys
         private static LowLevelKeyboardProc _proc = HookCallback;
         private static IntPtr _hookID = IntPtr.Zero;
         private static ILogger iLogger = Domas.DAP.ADF.LogManager.LogManager.GetLogger("KeyBoardCap");
-        public static void Main()
-        {
-            _hookID = SetHook(_proc);
-            Application.Run();
-            UnhookWindowsHookEx(_hookID);
-        }
+        //public static void Main()
+        //{
+        //    _hookID = SetHook(_proc);
+        //    Application.Run();
+        //    UnhookWindowsHookEx(_hookID);
+        //}
 
         private static IntPtr SetHook(LowLevelKeyboardProc proc)
         {

