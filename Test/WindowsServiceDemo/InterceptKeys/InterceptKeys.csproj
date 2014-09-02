@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InterceptKeys</RootNamespace>
     <AssemblyName>InterceptKeys</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,6 +60,17 @@
       <Project>{f52aa97e-180a-40ed-8f2b-09080171d6c7}</Project>
       <Name>MouseKeyboardActivityMonitor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NamedPipe\NamedPipe.csproj">
+      <Project>{9b677a7b-59bd-46b2-aba8-cb62c198b3ca}</Project>
+      <Name>NamedPipe</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Domas.DAP.ADF.LogManager.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

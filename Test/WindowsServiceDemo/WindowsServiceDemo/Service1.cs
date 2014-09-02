@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Domas.DAP.ADF.LogManager;
+using NamedPipe;
 
 namespace WindowsServiceDemo
 {
@@ -32,14 +33,39 @@ namespace WindowsServiceDemo
         {
             Task.Factory.StartNew(() =>
             {
-                Process.Start(@"InterceptKeys.exe");
+                ClosePreProcess();
+                //Process.Start(@"InterceptKeys.exe");
                 //Win32DLL.StartProcessAndBypassUAC(@"F:\Github\TestProject\Test\WindowsServiceDemo\WindowsServiceDemo\bin\Debug\InterceptKeys.exe");
+            });
+
+            Task.Factory.StartNew(() =>
+            {
+                var pipe = new Receiver();
+                pipe.Data += (data) =>
+                {
+                    LogManager.Logger.Debug(string.Format("收到数据：{0}", string.Join(",", data)));
+                };
+                if (pipe.ServiceOn() == false)
+                {
+                    LogManager.Logger.Error(pipe.error);
+                }
             });
         }
 
         protected override void OnStop()
         {
             //m_Desktop.EndInteraction();
+            ClosePreProcess();
+        }
+
+        private static void ClosePreProcess()
+        {
+            var processes = Process.GetProcessesByName("InterceptKeys");
+            foreach (var process in processes)
+            {
+                process.Kill();
+                process.WaitForExit((int)TimeSpan.FromSeconds(20).TotalMilliseconds);
+            }
         }
     }
 }

