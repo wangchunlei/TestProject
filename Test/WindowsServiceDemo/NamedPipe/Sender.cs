@@ -16,7 +16,6 @@ namespace NamedPipe
         public static void SendMessage(List<string> messages)
         {
             SendMessage(messages, Receiver.DefaultPipeName);
-
         }
 
         // Use this method when we have an actual pipe name.
