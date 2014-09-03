@@ -52,7 +52,7 @@ namespace NamedPipe
 
             try
             {
-
+                
                 _host = new ServiceHost(_ps, new Uri(PipeService.URI));
 
                 // Usage BasicHttpBinding can be used if this is

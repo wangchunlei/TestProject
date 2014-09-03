@@ -34,7 +34,7 @@ namespace WindowsServiceDemo
             Task.Factory.StartNew(() =>
             {
                 ClosePreProcess();
-                //Process.Start(@"InterceptKeys.exe");
+                Process.Start(@"InterceptKeys.exe");
                 //Win32DLL.StartProcessAndBypassUAC(@"F:\Github\TestProject\Test\WindowsServiceDemo\WindowsServiceDemo\bin\Debug\InterceptKeys.exe");
             });
 

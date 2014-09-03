@@ -36,6 +36,7 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Domas.DAP.ADF.LogManager">
       <HintPath>E:\trunk\Domas.Component\DAP\Domas.DAP.ADF.LogManager.dll</HintPath>

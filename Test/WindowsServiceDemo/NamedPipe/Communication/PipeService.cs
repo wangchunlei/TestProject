@@ -9,7 +9,7 @@ namespace NamedPipe.Communication
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class PipeService : IPipeService
     {
-        public static string URI = "net.pipe://localhost/Pipe";
+        public static string URI = "net.pipe://localhost/pipe";
 
         // This is when we used the HTTP bindings.
         // = "http://localhost:8000/Pipe";
