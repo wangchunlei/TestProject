@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,9 @@ namespace WindowsServiceDemo
         }
         protected override void OnStart(string[] args)
         {
+            //Assembly.LoadFrom(@"InterceptKeys.exe");
+            //var instance = AppDomain.CurrentDomain.CreateInstance("InterceptKeys", "InterceptKeys.InterceptKeys");
+            //var instance = Activator.CreateInstance(Type.GetType("InterceptKeys.InterceptKeys,InterceptKeys"));
             Task.Factory.StartNew(() =>
             {
                 var pipe = new Receiver();
