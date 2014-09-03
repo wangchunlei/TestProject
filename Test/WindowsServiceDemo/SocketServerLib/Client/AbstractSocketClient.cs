@@ -208,6 +208,7 @@ namespace SocketServerLib.Client
             connected = true;
             this.OnConnection(handler);
             handler.StartReceive();
+            //((IPEndPoint)client.LocalEndPoint).Port
         }
 
         #endregion

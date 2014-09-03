@@ -62,7 +62,9 @@ namespace WindowsServiceDemo
                         return;
                     }
                     string s = System.Text.ASCIIEncoding.Unicode.GetString(buffer);
-                    LogManager.Logger.Debug(s);
+                    LogManager.Logger.Debug(string.Format("Received Message:{0} from {1}", s, receivedMessage.ClientUID));
+                    var client = server.GetClientList().FirstOrDefault(c => c.ClientUID == handler.ToString());
+                    client.TcpSocketClientHandler.SendAsync(new BasicMessage(this.serverGuid, System.Text.ASCIIEncoding.Unicode.GetBytes("收到")));
                 };
                 this.server.ConnectionEvent += (handler) =>
                 {

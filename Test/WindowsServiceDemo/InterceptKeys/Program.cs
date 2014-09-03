@@ -38,6 +38,7 @@ namespace InterceptKeys
                 };
                 client.ConnectionEvent += (handler) =>
                 {
+                    Thread.Sleep(TimeSpan.FromSeconds(20));
                     logger.Debug("Client connected to remote server");
                 };
                 client.CloseConnectionEvent += (handler) =>
