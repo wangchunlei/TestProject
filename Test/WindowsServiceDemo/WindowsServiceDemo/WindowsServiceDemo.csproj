@@ -81,6 +81,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AsyncClientServerLib\AsyncClientServerLib.csproj">
+      <Project>{8fe423a8-2a17-42d4-a0d4-cf2cc8d5eb6e}</Project>
+      <Name>AsyncClientServerLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InterceptKeys\InterceptKeys.csproj">
       <Project>{3046f4e6-fab2-4f28-82ed-28ec3f2fdc92}</Project>
       <Name>InterceptKeys</Name>
@@ -88,6 +92,10 @@
     <ProjectReference Include="..\NamedPipe\NamedPipe.csproj">
       <Project>{9b677a7b-59bd-46b2-aba8-cb62c198b3ca}</Project>
       <Name>NamedPipe</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocketServerLib\SocketServerLib.csproj">
+      <Project>{3e43cbde-b04f-4232-9f91-b701e2a9b624}</Project>
+      <Name>SocketServerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

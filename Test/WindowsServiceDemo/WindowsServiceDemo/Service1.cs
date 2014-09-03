@@ -5,12 +5,16 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AsyncClientServerLib.Message;
+using AsyncClientServerLib.Server;
 using Domas.DAP.ADF.LogManager;
 using NamedPipe;
+using SocketServerLib.SocketHandler;
 
 namespace WindowsServiceDemo
 {
@@ -19,6 +23,8 @@ namespace WindowsServiceDemo
         private ILogger logger = LogManager.GetLogger("KeyDemo");
         //private KeyboardHookListener m_KeyboardHookManager;
         //private Desktop m_Desktop = new Desktop();
+        private BasicSocketServer server = null;
+        private Guid serverGuid = Guid.Empty;
 
         public Service1()
         {
@@ -33,13 +39,6 @@ namespace WindowsServiceDemo
         {
             Task.Factory.StartNew(() =>
             {
-                ClosePreProcess();
-                Process.Start(@"InterceptKeys.exe");
-                //Win32DLL.StartProcessAndBypassUAC(@"F:\Github\TestProject\Test\WindowsServiceDemo\WindowsServiceDemo\bin\Debug\InterceptKeys.exe");
-            });
-
-            Task.Factory.StartNew(() =>
-            {
                 var pipe = new Receiver();
                 pipe.Data += (data) =>
                 {
@@ -49,6 +48,35 @@ namespace WindowsServiceDemo
                 {
                     LogManager.Logger.Error(pipe.error);
                 }
+
+                //start socket server
+                this.serverGuid = Guid.NewGuid();
+                this.server = new BasicSocketServer();
+                this.server.ReceiveMessageEvent += (handler, message) =>
+                {
+                    BasicMessage receivedMessage = (BasicMessage)message;
+                    byte[] buffer = receivedMessage.GetBuffer();
+                    if (buffer.Length > 1000)
+                    {
+                        LogManager.Logger.Debug(string.Format("Received a long message of {0} bytes", receivedMessage.MessageLength), "Socket Server");
+                        return;
+                    }
+                    string s = System.Text.ASCIIEncoding.Unicode.GetString(buffer);
+                    LogManager.Logger.Debug(s);
+                };
+                this.server.ConnectionEvent += (handler) =>
+                {
+                    LogManager.Logger.Debug(string.Format("A client is connected to the server"), "Socket Server");
+                };
+                this.server.CloseConnectionEvent += (handler) =>
+                {
+                    LogManager.Logger.Debug(string.Format("A client is disconnected from the server"), "Socket Server");
+                };
+                this.server.Init(new IPEndPoint(IPAddress.Loopback, 8100));
+                this.server.StartUp();
+
+                ClosePreProcess();
+                Process.Start(@"InterceptKeys.exe");
             });
         }
 
@@ -56,6 +84,10 @@ namespace WindowsServiceDemo
         {
             //m_Desktop.EndInteraction();
             ClosePreProcess();
+            if (this.server != null)
+            {
+                this.server.Dispose();
+            }
         }
 
         private static void ClosePreProcess()
