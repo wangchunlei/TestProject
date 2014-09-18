@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOP", "AOP\AOP.csproj", "{964FDAC1-59E6-498D-ABA7-79673AC3ED39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityImp", "UnityImp\UnityImp.csproj", "{7F384AD9-73D6-4273-9EE0-32FC7BC09B4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityInterface", "UnityInterface\UnityInterface.csproj", "{FEA009C6-D4E6-47E3-8502-DE3724AE790E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{964FDAC1-59E6-498D-ABA7-79673AC3ED39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{964FDAC1-59E6-498D-ABA7-79673AC3ED39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{964FDAC1-59E6-498D-ABA7-79673AC3ED39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F384AD9-73D6-4273-9EE0-32FC7BC09B4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F384AD9-73D6-4273-9EE0-32FC7BC09B4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F384AD9-73D6-4273-9EE0-32FC7BC09B4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F384AD9-73D6-4273-9EE0-32FC7BC09B4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEA009C6-D4E6-47E3-8502-DE3724AE790E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEA009C6-D4E6-47E3-8502-DE3724AE790E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEA009C6-D4E6-47E3-8502-DE3724AE790E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEA009C6-D4E6-47E3-8502-DE3724AE790E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
 ﻿using AOP.Aspects;
 using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityInterface;
 
 namespace AOP
 {
@@ -15,16 +17,18 @@ namespace AOP
     {
         static void Main(string[] args)
         {
-            var container = new UnityContainer();
-            container.AddNewExtension<Interception>();
-            container.RegisterType<IApplication, Application>(
-                new InterceptionBehavior<PolicyInjectionBehavior>(),
-                new Interceptor<InterfaceInterceptor>()
-               // new InterceptionBehavior<LoggingInterceptionBehavior>()
-                );
+            var container = new UnityContainer().LoadConfiguration();
+            var ilogger = container.Resolve<ILogger>();
+            ilogger.Log("TEst");
+            //container.AddNewExtension<Interception>();
+            //container.RegisterType<IApplication, Application>(
+            //    new InterceptionBehavior<PolicyInjectionBehavior>(),
+            //    new Interceptor<InterfaceInterceptor>()
+            //   // new InterceptionBehavior<LoggingInterceptionBehavior>()
+            //    );
 
-            var app = container.Resolve<IApplication>();
-            app.Run();
+            //var app = container.Resolve<IApplication>();
+            //app.Run();
 
             //new Test().LongRunningCalc();
             Console.ReadKey(false);
