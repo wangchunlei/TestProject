@@ -18,8 +18,12 @@ namespace AOP
         static void Main(string[] args)
         {
             var container = new UnityContainer().LoadConfiguration();
-            var ilogger = container.Resolve<ILogger>();
-            ilogger.Log("TEst");
+            if (container.IsRegistered<ILogger>())
+            {
+                var ilogger = container.Resolve<ILogger>();
+                ilogger.Log("TEst");
+            }
+
             //container.AddNewExtension<Interception>();
             //container.RegisterType<IApplication, Application>(
             //    new InterceptionBehavior<PolicyInjectionBehavior>(),
