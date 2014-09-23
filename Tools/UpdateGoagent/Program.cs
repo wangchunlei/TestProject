@@ -21,10 +21,16 @@ namespace UpdateGoagent
 
             //var data = client.DownloadData(request);
             var url = "https://nodeload.github.com/goagent/goagent/legacy.zip/3.0";
-            if (args != null && args.Length > 0)
+            var targetPath = @"F:\goagent\";
+            if (args.Any(a => a.Trim().StartsWith("-url")))
             {
-                url = args[0];
+                url = args.First(p => p.Trim().StartsWith("-url", StringComparison.OrdinalIgnoreCase)).Replace("-url:", string.Empty).Trim();
             }
+            if (args.Any(a => a.Trim().StartsWith("-des")))
+            {
+                targetPath = args.First(p => p.Trim().StartsWith("-des", StringComparison.OrdinalIgnoreCase)).Replace("-des:", string.Empty).Trim();
+            }
+            Console.WriteLine("Url:{0}\nTargetPath:{1}", url, targetPath);
             byte[] bytes = null;
             DateTime start = DateTime.Now;
             using (var webClient = new WebClient())
@@ -49,7 +55,7 @@ namespace UpdateGoagent
                 bytes = task.Result;
             }
             Console.WriteLine();
-            var targetPath = @"F:\goagent\";
+
             using (var memory = new MemoryStream(bytes))
             {
                 DeleteCache(Path.Combine(targetPath, "goagent"));
